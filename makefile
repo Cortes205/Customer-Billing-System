@@ -1,5 +1,5 @@
-customerManager: main.o openData.o freeData.o hashAddCustomer.o helpers.o
-	gcc -std=c99 -Wall objectFiles/main.o objectFiles/openData.o objectFiles/freeData.o objectFiles/hashAddCustomer.o objectFiles/helpers.o -o bin/customerManager
+customerManager: main.o openData.o freeData.o hashAddCustomer.o hashAddTransaction.o helpers.o
+	gcc -std=c99 -Wall objectFiles/main.o objectFiles/openData.o objectFiles/freeData.o objectFiles/hashAddCustomer.o objectFiles/hashAddTransaction.o objectFiles/helpers.o -o bin/customerManager
 
 main.o: src/main.c include/header.h
 	gcc -std=c99 -Wall -c src/main.c -o objectFiles/main.o
@@ -12,6 +12,9 @@ freeData.o: src/freeData.c include/header.h
 
 hashAddCustomer.o: src/hashAddCustomer.c include/header.h
 	gcc -std=c99 -Wall -c src/hashAddCustomer.c -o objectFiles/hashAddCustomer.o
+
+hashAddTransaction.o: src/hashAddTransaction.c include/header.h
+	gcc -std=c99 -Wall -c src/hashAddTransaction.c -o objectFiles/hashAddTransaction.o
 
 helpers.o: src/helpers.c include/header.h
 	gcc -std=c99 -Wall -c src/helpers.c -o objectFiles/helpers.o

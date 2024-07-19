@@ -13,19 +13,22 @@ void freeData(customer** head, transaction** transactionMap) {
 	while (temp != NULL) {
 		currTransNode = temp->head;
 		while (currTransNode != NULL) {
-			unsigned long int index = (currTransNode->id * sumDigits(currTransNode->id)) % HASH_SIZE;
+			unsigned long int index = getTransactionHashIndex(currTransNode->id);
 			currTrans = transactionMap[index];
 			while (currTrans != NULL) {
 				prevTrans = currTrans;
 				currTrans = currTrans->hashNext;
 				free(prevTrans);
+				prevTrans = NULL;
 			}
 			prevTransNode = currTransNode;
 			currTransNode = currTransNode->next;
 			free(prevTransNode);
+			prevTransNode = NULL;
 		}
 		tempPrev = temp;
 		temp = temp->linkedNext;
 		free(tempPrev);
+		tempPrev = NULL;
 	}
 }
