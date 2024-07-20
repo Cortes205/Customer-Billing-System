@@ -106,12 +106,16 @@ void stringFormatName(char* string) {
 			}
 		/* If Uppercase */
 		} else if (string[i] > 64 && string[i] < 91) {
-			if (i != 0) {
-				string[i] += 32;
-			} else if (i == 2 && string[0] != 'M' && string[1] != 'c') {
-				string[i] += 32;
-			} else if (i == 3 && string[0] != 'M' && string[1] != 'a' && string[2] != 'c') {
-				string[i] += 32;
+			if (i == 2) {
+				if (string[0] != 'M' && string[1] != 'c') {
+					string[i] += 32;
+				}
+				break;
+			} else if (i == 3) {
+				if (string[0] != 'M' && string[1] != 'a' && string[2] != 'c') {
+					string[i] += 32;
+				}
+				break;
 			} else if (i != 0 && string[i-1] != ' ') {
 				string[i] += 32;
 			} 
