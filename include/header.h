@@ -9,7 +9,7 @@ typedef struct transactionNode {
 	struct transactionNode* next;
 } transactionNode;
 
-#define NAME_MAXLEN 25
+#define NAME_MAXLEN 30
 #define ADDRESS_MAXLEN 100
 #define PHONE_MAXLEN 20
 #define EMAIL_MAXLEN 100
@@ -27,7 +27,7 @@ typedef struct customer {
 } customer;
 
 #define SERVICE_MAXLEN 125
-#define DATE_MAXLEN 10
+#define DATE_MAXLEN 15
 #define STATUS_MAXLEN 25
 
 typedef struct transaction {
@@ -50,9 +50,10 @@ bool openData(char fileName[FILE_NAME_MAXLEN], customer** head, customer** tail,
 
 void sortByLastName(customer** head, customer** tail);
 void displayCustomers(customer* head);
+bool displayTransactions(transactionNode* head, transaction** transactionMap);
 
 void createCustomer(customer** customerMap, customer** tail);
-void editCustomer(customer* customerProfile);
+void editCustomer(customer* customerProfile, transaction** transactionMap);
 
 void createTransaction(transaction** transactionMap, customer* payor);
 void editTransaction(transaction* transactionInfo);
@@ -76,3 +77,5 @@ void stringUnspace(char* string);
 void stringFormatPhone(char* string);
 void stringFormatName(char* string);
 void stringSpaceOut(char* string);
+bool isNAN(char* string);
+bool validateIntegerInput(char* string, int* input, int leftBound, int rightBound);

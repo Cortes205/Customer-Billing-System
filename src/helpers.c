@@ -90,6 +90,35 @@ void stringFormatPhone(char* string) {
 	strcpy(string, temp);
 }
 
+void stringFormatName(char* string) {
+	for (int i = 0; i < strlen(string); i++) {
+		/* If Lowercase */
+		if (string[i] > 96 && string[i] < 123) {
+			if (i == 0) {
+				string[i] -= 32;
+				continue;
+			} else if (string[i-1] == ' ') {
+				string[i] -= 32;
+			} else if (i == 2 && string[0] == 'M' && string[1] == 'c') {
+				string[i] -= 32;
+			} else if (i == 3 && string[0] == 'M' && string[1] == 'a' && string[2] == 'c') {
+				string[i] -= 32;
+			}
+		/* If Uppercase */
+		} else if (string[i] > 64 && string[i] < 91) {
+			if (i != 0) {
+				string[i] += 32;
+			} else if (i == 2 && string[0] != 'M' && string[1] != 'c') {
+				string[i] += 32;
+			} else if (i == 3 && string[0] != 'M' && string[1] != 'a' && string[2] != 'c') {
+				string[i] += 32;
+			} else if (i != 0 && string[i-1] != ' ') {
+				string[i] += 32;
+			} 
+		}
+	}
+}
+
 void stringSpaceOut(char* string) {
 	char temp[500] = "";
 	int j = 0;
@@ -103,4 +132,31 @@ void stringSpaceOut(char* string) {
 	}
 
 	strcpy(string, temp);
+}
+
+bool isNAN(char* string) {
+	for (int i = 0; i < strlen(string); i++) {
+		if (string[i] < 48 || string[i] > 57) {
+			if (i == 0 && string[i] == 45) {
+				continue;
+			}
+			return true;
+		}
+	}
+	return false;
+}
+
+bool validateIntegerInput(char* string, int* input, int leftBound, int rightBound) {
+
+	if (isNAN(string)) {
+		printf("ERROR: Input is not a Number - Please Try Again\n\n");
+		return false;
+	} else {
+		sscanf(string, "%d", input);
+		if (*input < leftBound || *input > rightBound) {
+			printf("ERROR: Input is not in the range of %d-%d - Please Try Again\n\n", leftBound, rightBound);
+			return false;
+		}
+	}
+	return true;
 }
