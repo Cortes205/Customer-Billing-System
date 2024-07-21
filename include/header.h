@@ -43,7 +43,7 @@ typedef struct transaction {
 	struct transaction* hashNext; // Transactions in the same index spot (hash collision handling)
 } transaction;
 
-#define FILE_NAME_MAXLEN 75
+#define FILE_NAME_MAXLEN 90
 #define HASH_SIZE 1000
 
 bool openData(char fileName[FILE_NAME_MAXLEN], customer** head, customer** tail, customer** customerMap, transaction** transactionMap);
@@ -68,12 +68,14 @@ transaction* hashSearchTransaction(transaction** transactionMap, int id, int sto
 
 void hashAddCustomer(customer** customerMap, customer* addition, unsigned long int storageIndex);
 customer* hashSearchCustomer(customer** customerMap, char fname[NAME_MAXLEN], char lname[NAME_MAXLEN], int storageIndex);
+customer* multipleCustomers(customer** customersOfName, int numCustomers);
 
 
 // Helpers
 int sumDigits(int num);
 unsigned long int getCustomerHashIndex(char fname[NAME_MAXLEN], char lname[NAME_MAXLEN]);
 unsigned long int getTransactionHashIndex(int id);
+void displayContactInfo(customer* customerProfile);
 void stringToLowercase(char* string);
 void stringUppercaseAfterSpace(char* string);
 void stringUnspace(char* string);

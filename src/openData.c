@@ -17,6 +17,10 @@ bool openData(char fileName[FILE_NAME_MAXLEN], customer** head, customer** tail,
 		sscanf(buffer, "%s%s%s%s%s", newCustomer->fname, newCustomer->lname, newCustomer->address, newCustomer->phoneNumber, newCustomer->email);
 
 		stringSpaceOut(newCustomer->address);
+
+		char phoneNumberCopy[PHONE_MAXLEN] = "";
+		strcpy(phoneNumberCopy, newCustomer->phoneNumber);
+
 		stringFormatPhone(newCustomer->phoneNumber);
 
 		newCustomer->head = NULL;
@@ -40,6 +44,7 @@ bool openData(char fileName[FILE_NAME_MAXLEN], customer** head, customer** tail,
 		char transFile[FILE_NAME_MAXLEN] = "customers/";
 		strcat(transFile, newCustomer->fname);
 		strcat(transFile, newCustomer->lname);
+		strcat(transFile, phoneNumberCopy);
 		strcat(transFile, ".db");
 		stringToLowercase(transFile);
 
@@ -76,10 +81,8 @@ bool openData(char fileName[FILE_NAME_MAXLEN], customer** head, customer** tail,
 			unsigned long int transactionIndex = getTransactionHashIndex(newID->id);
 			hashAddTransaction(transactionMap, newTransaction, transactionIndex);
 		}
-	}
-	fclose(fptr);
-	if (transPtr != NULL) {
 		fclose(transPtr);
 	}
+	fclose(fptr);
 	return true;
 }

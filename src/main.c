@@ -62,7 +62,6 @@ int main() {
 				currentCustomer = hashSearchCustomer(customerMap, fname, lname, index);
 
 				if (currentCustomer == NULL) {
-					printf("%s %s does not exist in the database.\n\n", fname, lname);
 					break;
 				}
 

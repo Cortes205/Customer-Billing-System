@@ -29,9 +29,7 @@ void editCustomer(customer* customerProfile, transaction** transactionMap) {
 		printf("\n");
 		switch (option) {
 			case 1:
-				printf("\t\tHome Address: %s\n", customerProfile->address);
-				printf("\t\tPhone Number: %s\n", customerProfile->phoneNumber);
-				printf("\t\tEmail Address: %s\n", customerProfile->email);
+				displayContactInfo(customerProfile);
 				break;
 			case 2:
 				break;

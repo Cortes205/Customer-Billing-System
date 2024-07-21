@@ -29,6 +29,12 @@ unsigned long int getTransactionHashIndex(int id) {
 	return index;
 }
 
+void displayContactInfo(customer* customerProfile) {
+	printf("\t\tHome Address: %s\n", customerProfile->address);
+	printf("\t\tPhone Number: %s\n", customerProfile->phoneNumber);
+	printf("\t\tEmail Address: %s\n", customerProfile->email);
+}
+
 void stringToLowercase(char* string) {
 	for (int i = 0; i < strlen(string); i++) {
 		if (string[i] > 64 && string[i] < 91) {
