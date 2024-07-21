@@ -49,6 +49,9 @@ typedef struct transaction {
 bool openData(char fileName[FILE_NAME_MAXLEN], customer** head, customer** tail, customer** customerMap, transaction** transactionMap);
 
 void sortByLastName(customer** head, customer** tail);
+void merge(customer* left, customer* right, customer** head, customer** tail);
+customer* middleNode(customer* head);
+
 void displayCustomers(customer* head);
 bool displayTransactions(transactionNode* head, transaction** transactionMap);
 

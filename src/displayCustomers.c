@@ -8,7 +8,7 @@ void displayCustomers(customer* head) {
 
 	printf("Customer List (Last Name, First Name):\n\n");
 	while (head != NULL) {
-		printf("\t%s,\t%s\n", head->lname, head->fname);
+		printf("\t%s, %s\n", head->lname, head->fname);
 		head = head->linkedNext;
 	}
 	printf("\n");

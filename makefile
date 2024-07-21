@@ -1,5 +1,5 @@
-customerManager: main.o openData.o freeData.o editCustomer.o hashAddCustomer.o hashSearchCustomer.o hashAddTransaction.o hashSearchTransaction.o displayCustomers.o displayTransactions.o sortByLastName.o helpers.o
-	gcc -std=c99 -Wall objectFiles/main.o objectFiles/openData.o objectFiles/freeData.o objectFiles/editCustomer.o objectFiles/hashAddCustomer.o objectFiles/hashSearchCustomer.o objectFiles/hashAddTransaction.o objectFiles/hashSearchTransaction.o objectFiles/displayCustomers.o objectFiles/displayTransactions.o objectFiles/sortByLastName.o objectFiles/helpers.o -o bin/customerManager
+customerManager: main.o openData.o freeData.o editCustomer.o hashAddCustomer.o hashSearchCustomer.o hashAddTransaction.o hashSearchTransaction.o displayCustomers.o displayTransactions.o sortLinkedList.o helpers.o
+	gcc -std=c99 -Wall objectFiles/main.o objectFiles/openData.o objectFiles/freeData.o objectFiles/editCustomer.o objectFiles/hashAddCustomer.o objectFiles/hashSearchCustomer.o objectFiles/hashAddTransaction.o objectFiles/hashSearchTransaction.o objectFiles/displayCustomers.o objectFiles/displayTransactions.o objectFiles/sortLinkedList.o objectFiles/helpers.o -o bin/customerManager
 
 main.o: src/main.c include/header.h
 	gcc -std=c99 -Wall -c src/main.c -o objectFiles/main.o
@@ -31,8 +31,8 @@ displayCustomers.o: src/displayCustomers.c include/header.h
 displayTransactions.o: src/displayTransactions.c include/header.h
 	gcc -std=c99 -Wall -c src/displayTransactions.c -o objectFiles/displayTransactions.o
 
-sortByLastName.o: src/sortByLastName.c include/header.h
-	gcc -std=c99 -Wall -c src/sortByLastName.c -o objectFiles/sortByLastName.o
+sortLinkedList.o: src/sortLinkedList.c include/header.h
+	gcc -std=c99 -Wall -c src/sortLinkedList.c -o objectFiles/sortLinkedList.o
 
 helpers.o: src/helpers.c include/header.h
 	gcc -std=c99 -Wall -c src/helpers.c -o objectFiles/helpers.o
