@@ -61,8 +61,8 @@ I created a LinkedList within each customer profile. The HashMaps allow the
 user to look up a customer name or transaction id number in O(1) time complexity, and
 the LinkedLists allow the user to access all transactions specific to a customer.
 
-This project is good practice before my next semester where I learn more of
+This project is good practice before my next semester where I learn more about
 Data Structures & Algorithms. I am working ahead by learning about HashMaps and
-refining my skills in C with LinkedLists, pointers, and memory management!
+refining my skills in C by Merge Sorting words in a LinkedList, managing lots of pointers, and memory!
 
 [Linkedin](https://www.linkedin.com/in/cortes205/)
