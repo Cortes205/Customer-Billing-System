@@ -27,6 +27,7 @@ bool openData(char fileName[FILE_NAME_MAXLEN], customer** head, customer** tail,
 		newCustomer->tail = NULL;
 		newCustomer->hashNext = NULL;
 		newCustomer->linkedNext = NULL;
+		newCustomer->filePosition = ftell(fptr);
 
 		if (temp == NULL) {
 			*head = newCustomer;
@@ -42,10 +43,7 @@ bool openData(char fileName[FILE_NAME_MAXLEN], customer** head, customer** tail,
 		hashAddCustomer(customerMap, newCustomer, customerIndex);
 
 		char transFile[FILE_NAME_MAXLEN] = "customers/";
-		strcat(transFile, newCustomer->fname);
-		strcat(transFile, newCustomer->lname);
-		strcat(transFile, phoneNumberCopy);
-		strcat(transFile, ".db");
+		createFileName(transFile, newCustomer->fname, newCustomer->lname, phoneNumberCopy);
 		stringToLowercase(transFile);
 
 		transPtr = fopen(transFile, "a+");
@@ -66,6 +64,7 @@ bool openData(char fileName[FILE_NAME_MAXLEN], customer** head, customer** tail,
 
 			newTransaction->payor = newCustomer;
 			newTransaction->hashNext = NULL;
+			newTransaction->filePosition = ftell(transPtr) - strlen(transBuffer) - 1;
 
 			newID->id = newTransaction->id;
 			newID->next = NULL;

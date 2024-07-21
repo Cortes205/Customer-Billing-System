@@ -67,10 +67,10 @@ void stringUnspace(char* string) {
 }
 
 void stringFormatPhone(char* string) {
-	char temp[25] = "(";
+	char temp[PHONE_MAXLEN] = "(";
 
 	char areaCode[4] = "";
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < 3 && i < strlen(string); i++) {
 		areaCode[i] = string[i];
 	}
 	strcat(temp, areaCode);
@@ -78,7 +78,7 @@ void stringFormatPhone(char* string) {
 
 	char prefix[4] = "";
 	int j = 0;
-	for (int i = 3; i < 6; i++) {
+	for (int i = 3; i < 6 && i < strlen(string); i++) {
 		prefix[j] = string[i];
 		j++;
 	}
@@ -87,12 +87,24 @@ void stringFormatPhone(char* string) {
 
 	char lastFour[5] = "";
 	j = 0;
-	for (int i = 6; i < 10; i++) {
+	for (int i = 6; i < 10 && i < strlen(string); i++) {
 		lastFour[j] = string[i];
 		j++;
 	}
 	strcat(temp, lastFour);
 
+	strcpy(string, temp);
+}
+
+void stringUnformatPhone(char* string) {
+	char temp[PHONE_MAXLEN] = "";
+	int j = 0;
+	for (int i = 0; i < strlen(string); i++) {
+		if (string[i] > 47 && string[i] < 58) {
+			temp[j] = string[i];
+			j++;
+		}
+	}
 	strcpy(string, temp);
 }
 
@@ -115,7 +127,7 @@ void stringFormatName(char* string) {
 		} else if (string[i] > 64 && string[i] < 91) {
 			if (i == 2 && string[0] == 'M' && string[1] == 'c') continue;
 			if (i == 3 && string[0] == 'M' && string[1] == 'a' && string[2] == 'c') continue;
-			
+
 			if (i != 0 && string[i-1] != ' ' && string[i-1] != 39) {
 				string[i] += 32;
 			}
@@ -163,4 +175,11 @@ bool validateIntegerInput(char* string, int* input, int leftBound, int rightBoun
 		}
 	}
 	return true;
+}
+
+void createFileName(char* file, char* fname, char* lname, char* phoneNumber) {
+	strcat(file, fname);
+	strcat(file, lname);
+	strcat(file, phoneNumber);
+	strcat(file, ".db");
 }

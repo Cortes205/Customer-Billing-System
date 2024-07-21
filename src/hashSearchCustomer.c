@@ -15,7 +15,7 @@ customer* hashSearchCustomer(customer** customerMap, char fname[NAME_MAXLEN], ch
 
 	if (numCustomers == 0) {
 		printf("%s %s does not exist in the database.\n\n", fname, lname);
-		return NULL;
+		temp = NULL;
 	} else if (numCustomers == 1) {
 		temp = customersOfName[0];
 	} else {

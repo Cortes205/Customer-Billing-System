@@ -24,6 +24,7 @@ typedef struct customer {
 	transactionNode* tail; // Tail of transactions to make adding quicker
 	struct customer* hashNext; // Customers in the same index spot (hash collision handling)
 	struct customer* linkedNext; // Linked list of all customers (makes freeing easier)
+	long int filePosition;
 } customer;
 
 #define SERVICE_MAXLEN 125
@@ -41,6 +42,7 @@ typedef struct transaction {
 	char status[STATUS_MAXLEN];
 	customer* payor; // Customer that is the payor of a given transaction
 	struct transaction* hashNext; // Transactions in the same index spot (hash collision handling)
+	long int filePosition;
 } transaction;
 
 #define FILE_NAME_MAXLEN 90
@@ -53,20 +55,28 @@ void merge(customer* left, customer* right, customer** head, customer** tail);
 customer* middleNode(customer* head);
 
 void displayCustomers(customer* head);
+
 bool displayTransactions(transactionNode* head, transaction** transactionMap);
 
 void createCustomer(customer** customerMap, customer** tail);
-void editCustomer(customer* customerProfile, transaction** transactionMap);
+
+void editCustomer(customer* customerProfile, customer** customerMap, transaction** transactionMap);
+bool saveChanges(char file[FILE_NAME_MAXLEN], customer* customerProfile);
+char* formatInfo(customer* customerProfile);
+void changeHashPosition(customer** customerMap, char* oldFName, char* oldLName, char* fname, char* lnam, char* phoneNumber);
 
 void createTransaction(transaction** transactionMap, customer* payor);
+
 void editTransaction(transaction* transactionInfo);
 
 void freeData(customer** head, transaction** transactionMap);
 
 void hashAddTransaction(transaction** transactionMap, transaction* addition, int storageIndex);
+
 transaction* hashSearchTransaction(transaction** transactionMap, int id, int storageIndex);
 
 void hashAddCustomer(customer** customerMap, customer* addition, unsigned long int storageIndex);
+
 customer* hashSearchCustomer(customer** customerMap, char fname[NAME_MAXLEN], char lname[NAME_MAXLEN], int storageIndex);
 customer* multipleCustomers(customer** customersOfName, int numCustomers);
 
@@ -80,7 +90,9 @@ void stringToLowercase(char* string);
 void stringUppercaseAfterSpace(char* string);
 void stringUnspace(char* string);
 void stringFormatPhone(char* string);
+void stringUnformatPhone(char* string);
 void stringFormatName(char* string);
 void stringSpaceOut(char* string);
 bool isNAN(char* string);
 bool validateIntegerInput(char* string, int* input, int leftBound, int rightBound);
+void createFileName(char* file, char* fname, char* lname, char* phoneNumber);

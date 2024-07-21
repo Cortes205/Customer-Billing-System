@@ -65,7 +65,7 @@ int main() {
 					break;
 				}
 
-				editCustomer(currentCustomer, transactionMap);
+				editCustomer(currentCustomer, customerMap, transactionMap);
 
 				break;
 			case 3:
