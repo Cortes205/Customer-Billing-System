@@ -19,31 +19,26 @@ void sortByLastName(customer** head, customer** tail) {
 }
 
 void merge(customer* left, customer* right, customer** head, customer** tail) {
+	customer* temp = calloc(1, sizeof(customer));
+	temp->linkedNext = NULL;
+	*tail = temp;
+
 	while (left != NULL && right != NULL) {
 
 		stringToLowercase(left->lname);
 		stringToLowercase(right->lname);
 
-		int i = 0;
-		while (i < strlen(left->lname) && i < strlen(right->lname)) {
+		for (int i = 0; i < strlen(left->lname) && i < strlen(right->lname); i++) {
 			if (left->lname[i] == right->lname[i]) {
 				if (i == strlen(left->lname)-1) {
-					if (*head == NULL) {
-						*head = left;
-					} else {
-						(*tail)->linkedNext = left;
-					}
+					(*tail)->linkedNext = left;
 					*tail = left;
 					stringFormatName(left->lname);
 					stringFormatName(right->lname);
 					left = left->linkedNext;
 					break;
 				} else if (i == strlen(right->lname)-1) {
-					if (*head == NULL) {
-						*head = right;
-					} else {
-						(*tail)->linkedNext = right;
-					}
+					(*tail)->linkedNext = right;
 					*tail = right;
 					stringFormatName(left->lname);
 					stringFormatName(right->lname);
@@ -51,51 +46,37 @@ void merge(customer* left, customer* right, customer** head, customer** tail) {
 					break;
 				}
 			} else if (left->lname[i] < right->lname[i]) {
-				if (*head == NULL) {
-					*head = left;
-				} else {
-					(*tail)->linkedNext = left;
-				}
+				(*tail)->linkedNext = left;
 				*tail = left;
 				stringFormatName(left->lname);
 				stringFormatName(right->lname);
 				left = left->linkedNext;
 				break;
 			} else if (left->lname[i] > right->lname[i]) {
-				if (*head == NULL) {
-					*head = right;
-				} else {
-					(*tail)->linkedNext = right;
-				}
+				(*tail)->linkedNext = right;
 				*tail = right;
 				stringFormatName(left->lname);
 				stringFormatName(right->lname);
 				right = right->linkedNext;
 				break;
 			}
-			i++;
 		}
 	}
 
 	while (left != NULL) {
-		if (*head == NULL) {
-			*head = left;
-		} else {
-			(*tail)->linkedNext = left;
-		}
+		(*tail)->linkedNext = left;
 		*tail = left;
 		left = left->linkedNext;
 	}
 
 	while (right != NULL) {
-		if (*head == NULL) {
-			*head = right;
-		} else {
-			(*tail)->linkedNext = right;
-		}
+		(*tail)->linkedNext = right;
 		*tail = right;
 		right = right->linkedNext;
 	}
+
+	*head = temp->linkedNext;
+	free(temp);
 }
 
 customer* middleNode(customer* head) {
