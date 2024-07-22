@@ -15,7 +15,6 @@ void editCustomer(customer* customerProfile, customer** customerMap, transaction
 		printf("\t5. Create a Transaction\n");
 		printf("\t6. Back to the Main Menu\n\n");
 
-
 		bool valid = false;
 		while(!valid) {
 			printf("Enter an Option: ");
@@ -32,10 +31,14 @@ void editCustomer(customer* customerProfile, customer** customerMap, transaction
 
 		char oldFName[NAME_MAXLEN] = "";
 		char oldLName[NAME_MAXLEN] = "";
+		char oldAddress[NAME_MAXLEN] = "";
+		char oldPhone[NAME_MAXLEN] = "";
+		char oldEmail[NAME_MAXLEN] = "";
 
 		bool editMode = false;
 		bool newFileName = false;
 		bool hashChange = false;
+		bool saveAll = false;
 		switch (option) {
 			case 1:
 				displayContactInfo(customerProfile);
@@ -48,6 +51,9 @@ void editCustomer(customer* customerProfile, customer** customerMap, transaction
 
 				strcpy(oldFName, customerProfile->fname);
 				strcpy(oldLName, customerProfile->lname);
+				strcpy(oldAddress, customerProfile->address);
+				strcpy(oldPhone, customerProfile->phoneNumber);
+				strcpy(oldEmail, customerProfile->email);
 
 				editMode = true;
 				while (editMode) {
@@ -62,14 +68,15 @@ void editCustomer(customer* customerProfile, customer** customerMap, transaction
 					printf("\t3. Change Address\n");
 					printf("\t4. Change Phone Number\n");
 					printf("\t5. Change Email Address\n");
-					printf("\t6. Save & Go Back\n\n");
+					printf("\t6. Save & Go Back\n");
+					printf("\t7. Discard Changes & Go Back\n\n");
 
 					valid = false;
 					while (!valid) {
 						printf("Enter an Option: ");
 						fgets(userInput, 300, stdin);
 						userInput[strlen(userInput)-1] = '\0';
-						valid = validateIntegerInput(userInput, &option, 1, 6);
+						valid = validateIntegerInput(userInput, &option, 1, 7);
 					}
 
 					switch (option) {
@@ -126,24 +133,34 @@ void editCustomer(customer* customerProfile, customer** customerMap, transaction
 							strcpy(customerProfile->email, userInput);
 							break;
 						case 6:
+							saveAll = true;
+						case 7:
 							editMode = false;
 							break;
 					}
 				}
 
-				char mainFile[FILE_NAME_MAXLEN] = "customers.db";
-				saveChanges(mainFile, customerMap, customerProfile);
+				if (saveAll) {
+					char mainFile[FILE_NAME_MAXLEN] = "customers.db";
+					saveChanges(mainFile, customerMap, customerProfile);
 
-				if (newFileName) {
-					stringUnformatPhone(customerProfile->phoneNumber);
-					createFileName(newTransFile, customerProfile->fname, customerProfile->lname, customerProfile->phoneNumber);
-					stringToLowercase(newTransFile);
-					stringFormatPhone(customerProfile->phoneNumber);
-					rename(transFile, newTransFile);
-				}
+					if (newFileName) {
+						stringUnformatPhone(customerProfile->phoneNumber);
+						createFileName(newTransFile, customerProfile->fname, customerProfile->lname, customerProfile->phoneNumber);
+						stringToLowercase(newTransFile);
+						stringFormatPhone(customerProfile->phoneNumber);
+						rename(transFile, newTransFile);
+					}
 
-				if (hashChange) {
-					changeHashPosition(customerMap, oldFName, oldLName, customerProfile->fname, customerProfile->lname, customerProfile->phoneNumber);
+					if (hashChange) {
+						changeHashPosition(customerMap, oldFName, oldLName, customerProfile->fname, customerProfile->lname, customerProfile->phoneNumber);
+					}
+				} else {
+					strcpy(customerProfile->fname, oldFName);
+					strcpy(customerProfile->lname, oldLName);
+					strcpy(customerProfile->address, oldAddress);
+					strcpy(customerProfile->phoneNumber, oldPhone);
+					strcpy(customerProfile->email, oldEmail);
 				}
 				break;
 			case 3:
