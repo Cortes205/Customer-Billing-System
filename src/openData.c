@@ -14,19 +14,13 @@ bool openData(char fileName[FILE_NAME_MAXLEN], customer** head, customer** tail,
 	while (fgets(buffer, 300, fptr)) {
 		buffer[strlen(buffer)-1] = '\0';
 		customer* newCustomer = calloc(1, sizeof(customer));
-		sscanf(buffer, "%s%s%s%s%s", newCustomer->fname, newCustomer->lname, newCustomer->address, newCustomer->phoneNumber, newCustomer->email);
 
-		stringSpaceOut(newCustomer->address);
+		fillCustomerInfo(buffer, newCustomer);
 
 		char phoneNumberCopy[PHONE_MAXLEN] = "";
 		strcpy(phoneNumberCopy, newCustomer->phoneNumber);
+		stringUnformatPhone(phoneNumberCopy);
 
-		stringFormatPhone(newCustomer->phoneNumber);
-
-		newCustomer->head = NULL;
-		newCustomer->tail = NULL;
-		newCustomer->hashNext = NULL;
-		newCustomer->linkedNext = NULL;
 		newCustomer->filePosition = ftell(fptr);
 
 		if (temp == NULL) {

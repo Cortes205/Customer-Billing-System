@@ -53,3 +53,15 @@ customer* multipleCustomers(customer** customersOfName, int numCustomers) {
 
 	return customersOfName[option-1];
 }
+
+customer* hashSearchCustomerByPhone(customer** customerMap, char fname[NAME_MAXLEN], char lname[NAME_MAXLEN], char phoneNumber[PHONE_MAXLEN], int storageIndex) {
+	customer* temp = customerMap[storageIndex];
+    while (temp != NULL) {
+        if (strcmp(temp->fname, fname) == 0 && strcmp(temp->lname, lname) == 0 && strcmp(temp->phoneNumber, phoneNumber) == 0) {
+			break;
+        }
+		temp = temp->hashNext;
+	}
+
+	return temp;
+}

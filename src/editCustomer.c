@@ -132,7 +132,7 @@ void editCustomer(customer* customerProfile, customer** customerMap, transaction
 				}
 
 				char mainFile[FILE_NAME_MAXLEN] = "customers.db";
-				saveChanges(mainFile, customerProfile);
+				saveChanges(mainFile, customerMap, customerProfile);
 
 				if (newFileName) {
 					stringUnformatPhone(customerProfile->phoneNumber);
@@ -162,9 +162,9 @@ void editCustomer(customer* customerProfile, customer** customerMap, transaction
 	}
 }
 
-bool saveChanges(char file[FILE_NAME_MAXLEN], customer* customerProfile) {
+bool saveChanges(char file[FILE_NAME_MAXLEN], customer** customerMap, customer* customerProfile) {
 	FILE *fptr = fopen(file, "a+");
-    FILE *tempFptr = fopen("temp.db", "a+");
+	FILE *tempFptr = fopen("temp.db", "a+");
 	if (fptr == NULL || tempFptr == NULL) {
 		printf("ERROR: Changes Could Not Be Saved\n");
 		return false;
@@ -174,14 +174,26 @@ bool saveChanges(char file[FILE_NAME_MAXLEN], customer* customerProfile) {
 	fseek(tempFptr, 0, SEEK_SET);
 
 	char buffer[300] = "";
+	int addition = 0;
 	while (fgets(buffer, 300, fptr)) {
 		if (ftell(fptr) == customerProfile->filePosition) {
 			char* info = formatInfo(customerProfile);
 			fprintf(tempFptr, "%s\n", info);
-			customerProfile->filePosition = ftell(fptr) + (strlen(info) - strlen(buffer) + 1);
+			addition = strlen(info) - strlen(buffer) + 1;
+			customerProfile->filePosition = ftell(fptr) + addition;
 			free(info);
 		} else {
 			fprintf(tempFptr, "%s", buffer);
+
+			customer* customerToChange = calloc(1, sizeof(customer));
+			fillCustomerInfo(buffer, customerToChange);
+			unsigned long int index = getCustomerHashIndex(customerToChange->fname, customerToChange->lname);
+			customer* realCustomerNode = hashSearchCustomerByPhone(customerMap, customerToChange->fname, customerToChange->lname, customerToChange->phoneNumber, index);
+
+			if (realCustomerNode != NULL) realCustomerNode->filePosition = ftell(fptr) + addition;
+			else printf("SHIT WAS NULLLLLLL\n");
+			free(customerToChange);
+
 		}
 	}
 

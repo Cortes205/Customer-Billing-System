@@ -61,7 +61,7 @@ bool displayTransactions(transactionNode* head, transaction** transactionMap);
 void createCustomer(customer** customerMap, customer** tail);
 
 void editCustomer(customer* customerProfile, customer** customerMap, transaction** transactionMap);
-bool saveChanges(char file[FILE_NAME_MAXLEN], customer* customerProfile);
+bool saveChanges(char file[FILE_NAME_MAXLEN], customer** customerMap, customer* customerProfile);
 char* formatInfo(customer* customerProfile);
 void changeHashPosition(customer** customerMap, char* oldFName, char* oldLName, char* fname, char* lnam, char* phoneNumber);
 
@@ -79,6 +79,7 @@ void hashAddCustomer(customer** customerMap, customer* addition, unsigned long i
 
 customer* hashSearchCustomer(customer** customerMap, char fname[NAME_MAXLEN], char lname[NAME_MAXLEN], int storageIndex);
 customer* multipleCustomers(customer** customersOfName, int numCustomers);
+customer* hashSearchCustomerByPhone(customer** customerMap, char fname[NAME_MAXLEN], char lname[NAME_MAXLEN], char phoneNumber[PHONE_MAXLEN], int storageIndex);
 
 
 // Helpers
@@ -96,3 +97,4 @@ void stringSpaceOut(char* string);
 bool isNAN(char* string);
 bool validateIntegerInput(char* string, int* input, int leftBound, int rightBound);
 void createFileName(char* file, char* fname, char* lname, char* phoneNumber);
+void fillCustomerInfo(char *info, customer* addition);

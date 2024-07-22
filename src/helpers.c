@@ -183,3 +183,16 @@ void createFileName(char* file, char* fname, char* lname, char* phoneNumber) {
 	strcat(file, phoneNumber);
 	strcat(file, ".db");
 }
+
+void fillCustomerInfo(char *info, customer* newCustomer) {
+	sscanf(info, "%s%s%s%s%s", newCustomer->fname, newCustomer->lname, newCustomer->address, newCustomer->phoneNumber, newCustomer->email);
+
+	stringSpaceOut(newCustomer->address);
+
+	stringFormatPhone(newCustomer->phoneNumber);
+
+	newCustomer->head = NULL;
+	newCustomer->tail = NULL;
+	newCustomer->hashNext = NULL;
+	newCustomer->linkedNext = NULL;
+}
