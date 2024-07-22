@@ -207,8 +207,8 @@ bool saveChanges(char file[FILE_NAME_MAXLEN], customer** customerMap, customer* 
 			unsigned long int index = getCustomerHashIndex(customerToChange->fname, customerToChange->lname);
 			customer* realCustomerNode = hashSearchCustomerByPhone(customerMap, customerToChange->fname, customerToChange->lname, customerToChange->phoneNumber, index);
 
-			if (realCustomerNode != NULL) realCustomerNode->filePosition = ftell(fptr) + addition;
-			else printf("SHIT WAS NULLLLLLL\n");
+			realCustomerNode->filePosition = ftell(fptr) + addition;
+
 			free(customerToChange);
 
 		}
