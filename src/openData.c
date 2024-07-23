@@ -58,7 +58,7 @@ bool openData(char fileName[FILE_NAME_MAXLEN], customer** head, customer** tail,
 
 			newTransaction->payor = newCustomer;
 			newTransaction->hashNext = NULL;
-			newTransaction->filePosition = ftell(transPtr) - strlen(transBuffer) - 1;
+			newTransaction->filePosition = ftell(transPtr);
 
 			newID->id = newTransaction->id;
 			newID->next = NULL;

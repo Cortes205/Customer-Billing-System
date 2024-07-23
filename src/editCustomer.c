@@ -40,7 +40,8 @@ void editCustomer(customer* customerProfile, customer** customerMap, transaction
 				}
 				break;
 			case 4:
-				break;
+				editTransaction(transactionMap, customerProfile);
+ 				break;
 			case 5:
 				break;
 			case 6:
@@ -51,7 +52,6 @@ void editCustomer(customer* customerProfile, customer** customerMap, transaction
 }
 
 void editInfo(customer* customerProfile, customer** customerMap) {
-	bool editMode = false;
 	bool changeTransFile = false;
 	bool hashChange = false;
 	bool saveAll = false;
@@ -76,7 +76,7 @@ void editInfo(customer* customerProfile, customer** customerMap) {
 	strcpy(oldPhone, customerProfile->phoneNumber);
 	strcpy(oldEmail, customerProfile->email);
 
-	editMode = true;
+	bool editMode = true;
 	while (editMode) {
 
 		printf("\nContact Info Editing:\n\n");

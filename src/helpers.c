@@ -35,6 +35,17 @@ void displayContactInfo(customer* customerProfile) {
 	printf("\t\tEmail Address: %s\n", customerProfile->email);
 }
 
+void displayTransactionInfo(transaction* transactionInfo) {
+	printf("\t\tTransaction ID: %d\n", transactionInfo->id);
+	printf("\t\tService Date: %s\n", transactionInfo->serviceDate);
+	printf("\t\tService Description: %s\n", transactionInfo->service);
+	printf("\t\tTotal Amount: $%.2lf\n", transactionInfo->totalAmount);
+	printf("\t\tBalance Paid: $%.2lf\n", transactionInfo->paidAmount);
+	printf("\t\tBalance Owing: $%.2lf\n", transactionInfo->owingAmount);
+	printf("\t\tDue Date: %s\n", transactionInfo->dueDate);
+	printf("\t\tStatus: %s\n", transactionInfo->status);
+}
+
 void stringToLowercase(char* string) {
 	for (int i = 0; i < strlen(string); i++) {
 		if (string[i] > 64 && string[i] < 91) {

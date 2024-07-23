@@ -73,7 +73,8 @@ void changeHashPosition(customer** customerMap, char* oldFName, char* oldLName, 
 
 void createTransaction(transaction** transactionMap, customer* payor);
 
-void editTransaction(transaction* transactionInfo);
+/* src/editTransaction */
+void editTransaction(transaction** transactionMap, customer* customerProfile);
 
 /* src/freeData.c */
 void freeData(customer** head, transaction** transactionMap);
@@ -98,6 +99,7 @@ int sumDigits(int num);
 unsigned long int getCustomerHashIndex(char fname[NAME_MAXLEN], char lname[NAME_MAXLEN]);
 unsigned long int getTransactionHashIndex(int id);
 void displayContactInfo(customer* customerProfile);
+void displayTransactionInfo(transaction* transactionInfo);
 void stringToLowercase(char* string);
 void stringUppercaseAfterSpace(char* string);
 void stringUnspace(char* string);
@@ -107,5 +109,6 @@ void stringFormatName(char* string);
 void stringSpaceOut(char* string);
 bool isNAN(char* string);
 bool validateIntegerInput(char* string, int* input, int leftBound, int rightBound);
+bool validateDateInput(int month, int day, int year);
 void createFileName(char* file, char* fname, char* lname, char* phoneNumber);
 void fillCustomerInfo(char *info, customer* addition);
