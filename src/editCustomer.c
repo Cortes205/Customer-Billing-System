@@ -4,8 +4,6 @@ void editCustomer(customer* customerProfile, customer** customerMap, transaction
 	bool editing = true;
 	printf("\nOpening Profile...\n");
 
-	char userInput[300] = "";
-	int option = 0;
 	while (editing) {
 		printf("\n%s, %s:\n\n", customerProfile->lname, customerProfile->fname);
 		printf("\t1. View Contact Info\n");
@@ -16,6 +14,8 @@ void editCustomer(customer* customerProfile, customer** customerMap, transaction
 		printf("\t6. Back to the Main Menu\n\n");
 
 		bool valid = false;
+		char userInput[300] = "";
+		int option = 0;
 		while(!valid) {
 			printf("Enter an Option: ");
 
@@ -26,142 +26,13 @@ void editCustomer(customer* customerProfile, customer** customerMap, transaction
 		}
 
 		printf("\n");
-		char transFile[FILE_NAME_MAXLEN] = "customers/";
-		char newTransFile[FILE_NAME_MAXLEN] = "customers/";
 
-		char oldFName[NAME_MAXLEN] = "";
-		char oldLName[NAME_MAXLEN] = "";
-		char oldAddress[NAME_MAXLEN] = "";
-		char oldPhone[NAME_MAXLEN] = "";
-		char oldEmail[NAME_MAXLEN] = "";
-
-		bool editMode = false;
-		bool newFileName = false;
-		bool hashChange = false;
-		bool saveAll = false;
 		switch (option) {
 			case 1:
 				displayContactInfo(customerProfile);
 				break;
 			case 2:
-				stringUnformatPhone(customerProfile->phoneNumber);
-				createFileName(transFile, customerProfile->fname, customerProfile->lname, customerProfile->phoneNumber);
-				stringToLowercase(transFile);
-				stringFormatPhone(customerProfile->phoneNumber);
-
-				strcpy(oldFName, customerProfile->fname);
-				strcpy(oldLName, customerProfile->lname);
-				strcpy(oldAddress, customerProfile->address);
-				strcpy(oldPhone, customerProfile->phoneNumber);
-				strcpy(oldEmail, customerProfile->email);
-
-				editMode = true;
-				while (editMode) {
-
-					printf("\nContact Info Editing:\n\n");
-					printf("\t\tFirst Name: %s\n", customerProfile->fname);
-					printf("\t\tLast Name: %s\n", customerProfile->lname);
-					displayContactInfo(customerProfile);
-
-					printf("\n\t1. Change First Name\n");
-					printf("\t2. Change Last Name\n");
-					printf("\t3. Change Address\n");
-					printf("\t4. Change Phone Number\n");
-					printf("\t5. Change Email Address\n");
-					printf("\t6. Save & Go Back\n");
-					printf("\t7. Discard Changes & Go Back\n\n");
-
-					valid = false;
-					while (!valid) {
-						printf("Enter an Option: ");
-						fgets(userInput, 300, stdin);
-						userInput[strlen(userInput)-1] = '\0';
-						valid = validateIntegerInput(userInput, &option, 1, 7);
-					}
-
-					switch (option) {
-						case 1:
-							printf("\nEnter New First Name: ");
-
-							fgets(userInput, NAME_MAXLEN, stdin);
-							userInput[strlen(userInput)-1] = '\0';
-
-							strcpy(customerProfile->fname, userInput);
-							stringFormatName(customerProfile->fname);
-
-							newFileName = true;
-							hashChange = true;
-							break;
-						case 2:
-							printf("\nEnter New Last Name: ");
-
-							fgets(userInput, NAME_MAXLEN, stdin);
-							userInput[strlen(userInput)-1] = '\0';
-
-							strcpy(customerProfile->lname, userInput);
-							stringFormatName(customerProfile->lname);
-
-							newFileName = true;
-							hashChange = true;
-							break;
-						case 3:
-							printf("\nEnter New Address: ");
-
-							fgets(userInput, ADDRESS_MAXLEN, stdin);
-							userInput[strlen(userInput)-1] = '\0';
-
-							strcpy(customerProfile->address, userInput);
-							break;
-						case 4:
-							printf("\nEnter New Phone Number: ");
-
-							fgets(userInput, PHONE_MAXLEN, stdin);
-							userInput[strlen(userInput)-1] = '\0';
-
-							strcpy(customerProfile->phoneNumber, userInput);
-							stringUnformatPhone(customerProfile->phoneNumber);
-							stringFormatPhone(customerProfile->phoneNumber);
-
-							newFileName = true;
-							break;
-						case 5:
-							printf("\nEnter New Email Address: ");
-
-							fgets(userInput, EMAIL_MAXLEN, stdin);
-							userInput[strlen(userInput)-1] = '\0';
-
-							strcpy(customerProfile->email, userInput);
-							break;
-						case 6:
-							saveAll = true;
-						case 7:
-							editMode = false;
-							break;
-					}
-				}
-
-				if (saveAll) {
-					char mainFile[FILE_NAME_MAXLEN] = "customers.db";
-					saveChanges(mainFile, customerMap, customerProfile);
-
-					if (newFileName) {
-						stringUnformatPhone(customerProfile->phoneNumber);
-						createFileName(newTransFile, customerProfile->fname, customerProfile->lname, customerProfile->phoneNumber);
-						stringToLowercase(newTransFile);
-						stringFormatPhone(customerProfile->phoneNumber);
-						rename(transFile, newTransFile);
-					}
-
-					if (hashChange) {
-						changeHashPosition(customerMap, oldFName, oldLName, customerProfile->fname, customerProfile->lname, customerProfile->phoneNumber);
-					}
-				} else {
-					strcpy(customerProfile->fname, oldFName);
-					strcpy(customerProfile->lname, oldLName);
-					strcpy(customerProfile->address, oldAddress);
-					strcpy(customerProfile->phoneNumber, oldPhone);
-					strcpy(customerProfile->email, oldEmail);
-				}
+				editInfo(customerProfile, customerMap);
 				break;
 			case 3:
 				if (!displayTransactions(customerProfile->head, transactionMap)) {
@@ -176,6 +47,143 @@ void editCustomer(customer* customerProfile, customer** customerMap, transaction
 				editing = false;
 				break;
 		}
+	}
+}
+
+void editInfo(customer* customerProfile, customer** customerMap) {
+	bool editMode = false;
+	bool changeTransFile = false;
+	bool hashChange = false;
+	bool saveAll = false;
+
+	char transFile[FILE_NAME_MAXLEN] = "customers/";
+	char newTransFile[FILE_NAME_MAXLEN] = "customers/";
+
+	char oldFName[NAME_MAXLEN] = "";
+	char oldLName[NAME_MAXLEN] = "";
+	char oldAddress[ADDRESS_MAXLEN] = "";
+	char oldPhone[PHONE_MAXLEN] = "";
+	char oldEmail[EMAIL_MAXLEN] = "";
+
+	stringUnformatPhone(customerProfile->phoneNumber);
+	createFileName(transFile, customerProfile->fname, customerProfile->lname, customerProfile->phoneNumber);
+	stringToLowercase(transFile);
+	stringFormatPhone(customerProfile->phoneNumber);
+
+	strcpy(oldFName, customerProfile->fname);
+	strcpy(oldLName, customerProfile->lname);
+	strcpy(oldAddress, customerProfile->address);
+	strcpy(oldPhone, customerProfile->phoneNumber);
+	strcpy(oldEmail, customerProfile->email);
+
+	editMode = true;
+	while (editMode) {
+
+		printf("\nContact Info Editing:\n\n");
+		printf("\t\tFirst Name: %s\n", customerProfile->fname);
+		printf("\t\tLast Name: %s\n", customerProfile->lname);
+		displayContactInfo(customerProfile);
+
+		printf("\n\t1. Change First Name\n");
+		printf("\t2. Change Last Name\n");
+		printf("\t3. Change Address\n");
+		printf("\t4. Change Phone Number\n");
+		printf("\t5. Change Email Address\n");
+		printf("\t6. Save & Go Back\n");
+		printf("\t7. Discard Changes & Go Back\n\n");
+
+		bool valid = false;
+		char userInput[300] = "";
+		int option = 0;
+		while (!valid) {
+			printf("Enter an Option: ");
+			fgets(userInput, 300, stdin);
+			userInput[strlen(userInput)-1] = '\0';
+			valid = validateIntegerInput(userInput, &option, 1, 7);
+		}
+
+		switch (option) {
+			case 1:
+				printf("\nEnter New First Name: ");
+
+				fgets(userInput, NAME_MAXLEN, stdin);
+				userInput[strlen(userInput)-1] = '\0';
+
+				strcpy(customerProfile->fname, userInput);
+				stringFormatName(customerProfile->fname);
+
+				changeTransFile = true;
+				hashChange = true;
+				break;
+			case 2:
+				printf("\nEnter New Last Name: ");
+
+				fgets(userInput, NAME_MAXLEN, stdin);
+				userInput[strlen(userInput)-1] = '\0';
+
+				strcpy(customerProfile->lname, userInput);
+				stringFormatName(customerProfile->lname);
+
+				changeTransFile = true;
+				hashChange = true;
+				break;
+			case 3:
+				printf("\nEnter New Address: ");
+
+				fgets(userInput, ADDRESS_MAXLEN, stdin);
+				userInput[strlen(userInput)-1] = '\0';
+
+				strcpy(customerProfile->address, userInput);
+				break;
+			case 4:
+				printf("\nEnter New Phone Number: ");
+
+				fgets(userInput, PHONE_MAXLEN, stdin);
+				userInput[strlen(userInput)-1] = '\0';
+
+				strcpy(customerProfile->phoneNumber, userInput);
+				stringUnformatPhone(customerProfile->phoneNumber);
+				stringFormatPhone(customerProfile->phoneNumber);
+
+				changeTransFile = true;
+				break;
+			case 5:
+				printf("\nEnter New Email Address: ");
+
+				fgets(userInput, EMAIL_MAXLEN, stdin);
+				userInput[strlen(userInput)-1] = '\0';
+
+				strcpy(customerProfile->email, userInput);
+				break;
+			case 6:
+				saveAll = true;
+			case 7:
+				editMode = false;
+				break;
+		}
+	}
+
+	if (saveAll) {
+		char mainFile[FILE_NAME_MAXLEN] = "customers.db";
+		saveChanges(mainFile, customerMap, customerProfile);
+
+		if (changeTransFile) {
+			stringUnformatPhone(customerProfile->phoneNumber);
+			createFileName(newTransFile, customerProfile->fname, customerProfile->lname, customerProfile->phoneNumber);
+			stringToLowercase(newTransFile);
+			stringFormatPhone(customerProfile->phoneNumber);
+			rename(transFile, newTransFile);
+		}
+
+		if (hashChange) {
+			changeHashPosition(customerMap, oldFName, oldLName, customerProfile->fname, customerProfile->lname, customerProfile->phoneNumber);
+		}
+	} else {
+		strcpy(customerProfile->fname, oldFName);
+		strcpy(customerProfile->lname, oldLName);
+		strcpy(customerProfile->address, oldAddress);
+		strcpy(customerProfile->phoneNumber, oldPhone);
+		strcpy(customerProfile->email, oldEmail);
 	}
 }
 

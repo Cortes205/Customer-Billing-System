@@ -48,19 +48,25 @@ typedef struct transaction {
 #define FILE_NAME_MAXLEN 90
 #define HASH_SIZE 1000
 
+/* src/openData.c */
 bool openData(char fileName[FILE_NAME_MAXLEN], customer** head, customer** tail, customer** customerMap, transaction** transactionMap);
 
+/* src/sortLinkedList.c */
 void sortByLastName(customer** head, customer** tail);
 void merge(customer* left, customer* right, customer** head, customer** tail);
 customer* middleNode(customer* head);
 
+/* src/displayCustomers.c */
 void displayCustomers(customer* head);
 
+/* src/displayTransactions.c */
 bool displayTransactions(transactionNode* head, transaction** transactionMap);
 
 void createCustomer(customer** customerMap, customer** tail);
 
+/* src/editCustomer.c */
 void editCustomer(customer* customerProfile, customer** customerMap, transaction** transactionMap);
+void editInfo(customer* customerProfile, customer** customerMap);
 bool saveChanges(char file[FILE_NAME_MAXLEN], customer** customerMap, customer* customerProfile);
 char* formatInfo(customer* customerProfile);
 void changeHashPosition(customer** customerMap, char* oldFName, char* oldLName, char* fname, char* lnam, char* phoneNumber);
@@ -69,20 +75,25 @@ void createTransaction(transaction** transactionMap, customer* payor);
 
 void editTransaction(transaction* transactionInfo);
 
+/* src/freeData.c */
 void freeData(customer** head, transaction** transactionMap);
 
+/* src/hashAddTransaction.c */
 void hashAddTransaction(transaction** transactionMap, transaction* addition, int storageIndex);
 
+/* src/hashSearchTransaction.c */
 transaction* hashSearchTransaction(transaction** transactionMap, int id, int storageIndex);
 
+/* src/hashAddCustomer.c */
 void hashAddCustomer(customer** customerMap, customer* addition, unsigned long int storageIndex);
 
+/* src/hashSearchCustomer */
 customer* hashSearchCustomer(customer** customerMap, char fname[NAME_MAXLEN], char lname[NAME_MAXLEN], int storageIndex);
 customer* multipleCustomers(customer** customersOfName, int numCustomers);
 customer* hashSearchCustomerByPhone(customer** customerMap, char fname[NAME_MAXLEN], char lname[NAME_MAXLEN], char phoneNumber[PHONE_MAXLEN], int storageIndex);
 
 
-// Helpers
+/* src/helpers.c */
 int sumDigits(int num);
 unsigned long int getCustomerHashIndex(char fname[NAME_MAXLEN], char lname[NAME_MAXLEN]);
 unsigned long int getTransactionHashIndex(int id);

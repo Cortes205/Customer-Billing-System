@@ -13,8 +13,6 @@ int main() {
 		running = false;
 	}
 
-	char userInput[300] = "";
-	int option = 0;
 	while (running) {
 		printf("Main Menu:\n\n");
 		printf("\t1. View All Customers\n");
@@ -27,6 +25,8 @@ int main() {
 		printf("\t8. Exit\n\n");
 
 		bool valid = false;
+		char userInput[300] = "";
+		int option = 0;
 		while (!valid) {
 			printf("Enter Option: ");
 
