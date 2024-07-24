@@ -67,14 +67,18 @@ void createCustomer(customer** customerMap, customer** tail);
 /* src/editCustomer.c */
 void editCustomer(customer* customerProfile, customer** customerMap, transaction** transactionMap);
 void editInfo(customer* customerProfile, customer** customerMap);
-bool saveChanges(char file[FILE_NAME_MAXLEN], customer** customerMap, customer* customerProfile);
-char* formatInfo(customer* customerProfile);
-void changeHashPosition(customer** customerMap, char* oldFName, char* oldLName, char* fname, char* lnam, char* phoneNumber);
+bool saveCustomerChanges(char file[FILE_NAME_MAXLEN], customer** customerMap, customer* customerProfile);
+char* formatCustomerInfo(customer* customerProfile);
+void changeCustomerHashPosition(customer** customerMap, char* oldFName, char* oldLName, char* fname, char* lname, char* phoneNumber);
 
 void createTransaction(transaction** transactionMap, customer* payor);
 
 /* src/editTransaction */
 void editTransaction(transaction** transactionMap, customer* customerProfile);
+void changeTransactionIdNodes(transactionNode* head, int oldId, int id);
+void changeTransactionHashPosition(transaction** transactionMap, int oldId, int id);
+bool saveTransactionChanges(char file[FILE_NAME_MAXLEN], transaction** transactionMap, transaction* transactionInfo);
+char* formatTransactionInfo(transaction* transactionInfo);
 
 /* src/freeData.c */
 void freeData(customer** head, transaction** transactionMap);
@@ -93,7 +97,6 @@ customer* hashSearchCustomer(customer** customerMap, char fname[NAME_MAXLEN], ch
 customer* multipleCustomers(customer** customersOfName, int numCustomers);
 customer* hashSearchCustomerByPhone(customer** customerMap, char fname[NAME_MAXLEN], char lname[NAME_MAXLEN], char phoneNumber[PHONE_MAXLEN], int storageIndex);
 
-
 /* src/helpers.c */
 int sumDigits(int num);
 unsigned long int getCustomerHashIndex(char fname[NAME_MAXLEN], char lname[NAME_MAXLEN]);
@@ -101,14 +104,19 @@ unsigned long int getTransactionHashIndex(int id);
 void displayContactInfo(customer* customerProfile);
 void displayTransactionInfo(transaction* transactionInfo);
 void stringToLowercase(char* string);
+void stringToUppercase(char* string);
 void stringUppercaseAfterSpace(char* string);
 void stringUnspace(char* string);
 void stringFormatPhone(char* string);
 void stringUnformatPhone(char* string);
 void stringFormatName(char* string);
 void stringSpaceOut(char* string);
-bool isNAN(char* string);
-bool validateIntegerInput(char* string, int* input, int leftBound, int rightBound);
+bool isNAN(char* string, bool isDouble);
+bool validateIntegerInput(char* string, int* input, bool bounds, int leftBound, int rightBound);
+bool validateDoubleInput(char* string, double* input, bool bounds, int leftBound, int rightBound);
 bool validateDateInput(int month, int day, int year);
 void createFileName(char* file, char* fname, char* lname, char* phoneNumber);
 void fillCustomerInfo(char *info, customer* addition);
+void fillTransactionInfo(char *info, transaction* newTransaction);
+void takeDateInput(char* userInput, char* prompt, int* month, int* day, int* year);
+void takeDoubleInput(char* userInput, char* prompt, double *input);

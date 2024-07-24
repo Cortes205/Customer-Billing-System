@@ -43,7 +43,7 @@ customer* multipleCustomers(customer** customersOfName, int numCustomers) {
 		printf("Enter an Option: ");
 		fgets(userInput, 300, stdin);
 		userInput[strlen(userInput)-1] = '\0';
-		valid = validateIntegerInput(userInput, &option, 1, numCustomers+1);
+		valid = validateIntegerInput(userInput, &option, true, 1, numCustomers+1);
 	}
 
 	if (option == numCustomers+1) {

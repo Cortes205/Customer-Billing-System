@@ -17,10 +17,6 @@ bool openData(char fileName[FILE_NAME_MAXLEN], customer** head, customer** tail,
 
 		fillCustomerInfo(buffer, newCustomer);
 
-		char phoneNumberCopy[PHONE_MAXLEN] = "";
-		strcpy(phoneNumberCopy, newCustomer->phoneNumber);
-		stringUnformatPhone(phoneNumberCopy);
-
 		newCustomer->filePosition = ftell(fptr);
 
 		if (temp == NULL) {
@@ -37,8 +33,7 @@ bool openData(char fileName[FILE_NAME_MAXLEN], customer** head, customer** tail,
 		hashAddCustomer(customerMap, newCustomer, customerIndex);
 
 		char transFile[FILE_NAME_MAXLEN] = "customers/";
-		createFileName(transFile, newCustomer->fname, newCustomer->lname, phoneNumberCopy);
-		stringToLowercase(transFile);
+		createFileName(transFile, newCustomer->fname, newCustomer->lname, newCustomer->phoneNumber);
 
 		transPtr = fopen(transFile, "a+");
 		if (transPtr == NULL) {
@@ -52,12 +47,10 @@ bool openData(char fileName[FILE_NAME_MAXLEN], customer** head, customer** tail,
 			transBuffer[strlen(transBuffer)-1] = '\0';
 			transaction* newTransaction = calloc(1, sizeof(transaction));
 			transactionNode* newID = calloc(1, sizeof(transactionNode));
-			sscanf(transBuffer, "%d%s%s%lf%lf%lf%s%s", &(newTransaction->id), newTransaction->serviceDate, newTransaction->service, &(newTransaction->totalAmount), &(newTransaction->paidAmount), &(newTransaction->owingAmount), newTransaction->dueDate, newTransaction->status);
-
-			stringSpaceOut(newTransaction->service);
+			
+			fillTransactionInfo(transBuffer, newTransaction);
 
 			newTransaction->payor = newCustomer;
-			newTransaction->hashNext = NULL;
 			newTransaction->filePosition = ftell(transPtr);
 
 			newID->id = newTransaction->id;

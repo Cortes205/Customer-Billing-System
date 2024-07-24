@@ -22,7 +22,7 @@ void editCustomer(customer* customerProfile, customer** customerMap, transaction
 			fgets(userInput, 300, stdin);
 			userInput[strlen(userInput)-1] = '\0';
 
-			valid = validateIntegerInput(userInput, &option, 1, 6);
+			valid = validateIntegerInput(userInput, &option, true, 1, 6);
 		}
 
 		printf("\n");
@@ -65,10 +65,7 @@ void editInfo(customer* customerProfile, customer** customerMap) {
 	char oldPhone[PHONE_MAXLEN] = "";
 	char oldEmail[EMAIL_MAXLEN] = "";
 
-	stringUnformatPhone(customerProfile->phoneNumber);
 	createFileName(transFile, customerProfile->fname, customerProfile->lname, customerProfile->phoneNumber);
-	stringToLowercase(transFile);
-	stringFormatPhone(customerProfile->phoneNumber);
 
 	strcpy(oldFName, customerProfile->fname);
 	strcpy(oldLName, customerProfile->lname);
@@ -99,17 +96,15 @@ void editInfo(customer* customerProfile, customer** customerMap) {
 			printf("Enter an Option: ");
 			fgets(userInput, 300, stdin);
 			userInput[strlen(userInput)-1] = '\0';
-			valid = validateIntegerInput(userInput, &option, 1, 7);
+			valid = validateIntegerInput(userInput, &option, true, 1, 7);
 		}
 
 		switch (option) {
 			case 1:
 				printf("\nEnter New First Name: ");
 
-				fgets(userInput, NAME_MAXLEN, stdin);
-				userInput[strlen(userInput)-1] = '\0';
-
-				strcpy(customerProfile->fname, userInput);
+				fgets(customerProfile->fname, NAME_MAXLEN, stdin);
+				customerProfile->fname[strlen(customerProfile->fname)-1] = '\0';
 				stringFormatName(customerProfile->fname);
 
 				changeTransFile = true;
@@ -118,10 +113,8 @@ void editInfo(customer* customerProfile, customer** customerMap) {
 			case 2:
 				printf("\nEnter New Last Name: ");
 
-				fgets(userInput, NAME_MAXLEN, stdin);
-				userInput[strlen(userInput)-1] = '\0';
-
-				strcpy(customerProfile->lname, userInput);
+				fgets(customerProfile->lname, NAME_MAXLEN, stdin);
+				customerProfile->lname[strlen(customerProfile->lname)-1] = '\0';
 				stringFormatName(customerProfile->lname);
 
 				changeTransFile = true;
@@ -130,18 +123,16 @@ void editInfo(customer* customerProfile, customer** customerMap) {
 			case 3:
 				printf("\nEnter New Address: ");
 
-				fgets(userInput, ADDRESS_MAXLEN, stdin);
-				userInput[strlen(userInput)-1] = '\0';
+				fgets(customerProfile->address, ADDRESS_MAXLEN, stdin);
+				customerProfile->address[strlen(customerProfile->address)-1] = '\0';
 
-				strcpy(customerProfile->address, userInput);
 				break;
 			case 4:
 				printf("\nEnter New Phone Number: ");
 
-				fgets(userInput, PHONE_MAXLEN, stdin);
-				userInput[strlen(userInput)-1] = '\0';
+				fgets(customerProfile->phoneNumber, PHONE_MAXLEN, stdin);
+				customerProfile->phoneNumber[strlen(customerProfile->phoneNumber)-1] = '\0';
 
-				strcpy(customerProfile->phoneNumber, userInput);
 				stringUnformatPhone(customerProfile->phoneNumber);
 				stringFormatPhone(customerProfile->phoneNumber);
 
@@ -150,10 +141,9 @@ void editInfo(customer* customerProfile, customer** customerMap) {
 			case 5:
 				printf("\nEnter New Email Address: ");
 
-				fgets(userInput, EMAIL_MAXLEN, stdin);
-				userInput[strlen(userInput)-1] = '\0';
+				fgets(customerProfile->email, EMAIL_MAXLEN, stdin);
+				customerProfile->email[strlen(customerProfile->email)-1] = '\0';
 
-				strcpy(customerProfile->email, userInput);
 				break;
 			case 6:
 				saveAll = true;
@@ -165,18 +155,15 @@ void editInfo(customer* customerProfile, customer** customerMap) {
 
 	if (saveAll) {
 		char mainFile[FILE_NAME_MAXLEN] = "customers.db";
-		saveChanges(mainFile, customerMap, customerProfile);
+		saveCustomerChanges(mainFile, customerMap, customerProfile);
 
 		if (changeTransFile) {
-			stringUnformatPhone(customerProfile->phoneNumber);
 			createFileName(newTransFile, customerProfile->fname, customerProfile->lname, customerProfile->phoneNumber);
-			stringToLowercase(newTransFile);
-			stringFormatPhone(customerProfile->phoneNumber);
 			rename(transFile, newTransFile);
 		}
 
 		if (hashChange) {
-			changeHashPosition(customerMap, oldFName, oldLName, customerProfile->fname, customerProfile->lname, customerProfile->phoneNumber);
+			changeCustomerHashPosition(customerMap, oldFName, oldLName, customerProfile->fname, customerProfile->lname, customerProfile->phoneNumber);
 		}
 	} else {
 		strcpy(customerProfile->fname, oldFName);
@@ -187,7 +174,7 @@ void editInfo(customer* customerProfile, customer** customerMap) {
 	}
 }
 
-bool saveChanges(char file[FILE_NAME_MAXLEN], customer** customerMap, customer* customerProfile) {
+bool saveCustomerChanges(char file[FILE_NAME_MAXLEN], customer** customerMap, customer* customerProfile) {
 	FILE *fptr = fopen(file, "a+");
 	FILE *tempFptr = fopen("temp.db", "a+");
 	if (fptr == NULL || tempFptr == NULL) {
@@ -202,7 +189,7 @@ bool saveChanges(char file[FILE_NAME_MAXLEN], customer** customerMap, customer* 
 	int addition = 0;
 	while (fgets(buffer, 300, fptr)) {
 		if (ftell(fptr) == customerProfile->filePosition) {
-			char* info = formatInfo(customerProfile);
+			char* info = formatCustomerInfo(customerProfile);
 			fprintf(tempFptr, "%s\n", info);
 			addition = strlen(info) - strlen(buffer) + 1;
 			customerProfile->filePosition = ftell(fptr) + addition;
@@ -230,28 +217,20 @@ bool saveChanges(char file[FILE_NAME_MAXLEN], customer** customerMap, customer* 
 	return true;
 }
 
-char* formatInfo(customer* customerProfile) {
+char* formatCustomerInfo(customer* customerProfile) {
 	char* info = calloc(300, sizeof(char));
 
 	stringUnspace(customerProfile->address);
 	stringUnformatPhone(customerProfile->phoneNumber);
 
-	strcat(info, customerProfile->fname);
-	strcat(info, " ");
-	strcat(info, customerProfile->lname);
-	strcat(info, " ");
-	strcat(info, customerProfile->address);
-	strcat(info, " ");
-	strcat(info, customerProfile->phoneNumber);
-	strcat(info, " ");
-	strcat(info, customerProfile->email);
+	sprintf(info, "%s %s %s %s %s", customerProfile->fname, customerProfile->lname, customerProfile->address, customerProfile->phoneNumber, customerProfile->email);
 
 	stringSpaceOut(customerProfile->address);
 	stringFormatPhone(customerProfile->phoneNumber);
 	return info;
 }
 
-void changeHashPosition(customer** customerMap, char* oldFName, char* oldLName, char* fname, char* lname, char* phoneNumber) {
+void changeCustomerHashPosition(customer** customerMap, char* oldFName, char* oldLName, char* fname, char* lname, char* phoneNumber) {
 	unsigned long int index = getCustomerHashIndex(oldFName, oldLName);
 	customer* tempPrev = NULL;
 	customer* temp = customerMap[index];

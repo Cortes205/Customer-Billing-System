@@ -33,7 +33,7 @@ int main() {
 			fgets(userInput, 300, stdin);
 			userInput[strlen(userInput)-1] = '\0';
 
-			valid = validateIntegerInput(userInput, &option, 1, 8);
+			valid = validateIntegerInput(userInput, &option, true, 1, 8);
 		}
 
 		if (option != 8) printf("\n");

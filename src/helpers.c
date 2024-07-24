@@ -54,9 +54,21 @@ void stringToLowercase(char* string) {
 	}
 }
 
+void stringToUppercase(char* string) {
+	for (int i = 0; i < strlen(string); i++) {
+		if (string[i] > 96 && string[i] < 123) {
+			string[i] -= 32;
+		}
+	}
+}
+
 void stringUppercaseAfterSpace(char* string) {
-	for (int i = 1; i < strlen(string); i++) {
-		if (string[i-1] == 32) {
+	for (int i = 0; i < strlen(string); i++) {
+		if (i == 0) {
+			if (string[i] > 96 && string[i] < 123) {
+				string[i] -= 32;
+			}
+		} else if (string[i-1] == 32) {
 			if (string[i] > 96 && string[i] < 123) {
 				string[i] -= 32;
 			}
@@ -161,26 +173,33 @@ void stringSpaceOut(char* string) {
 	strcpy(string, temp);
 }
 
-bool isNAN(char* string) {
+bool isNAN(char* string, bool isDouble) {
+	bool hasDecimal = false;
 	for (int i = 0; i < strlen(string); i++) {
 		if (string[i] < 48 || string[i] > 57) {
-			if (i == 0 && string[i] == 45) {
+
+			if (i == 0 && string[i] == '-') {
 				continue;
 			}
+
+			if (isDouble && !hasDecimal && string[i] == '.' && i != 0) {
+				hasDecimal = true;
+				continue;
+			}
+
 			return true;
 		}
 	}
 	return false;
 }
 
-bool validateIntegerInput(char* string, int* input, int leftBound, int rightBound) {
-
-	if (isNAN(string)) {
+bool validateIntegerInput(char* string, int* input, bool bounds, int leftBound, int rightBound) {
+	if (isNAN(string, false)) {
 		printf("ERROR: Input is not a Number - Please Try Again\n\n");
 		return false;
 	} else {
 		sscanf(string, "%d", input);
-		if (*input < leftBound || *input > rightBound) {
+		if (bounds && (*input < leftBound || *input > rightBound)) {
 			printf("ERROR: Input is not in the range of %d-%d - Please Try Again\n\n", leftBound, rightBound);
 			return false;
 		}
@@ -188,11 +207,51 @@ bool validateIntegerInput(char* string, int* input, int leftBound, int rightBoun
 	return true;
 }
 
+bool validateDoubleInput(char* string, double* input, bool bounds, int leftBound, int rightBound) {
+	if (isNAN(string, true)) {
+		printf("ERROR: Input is not a Number - Please Try Again\n\n");
+		return false;
+	} else {
+		sscanf(string, "%lf", input);
+		if (bounds && (*input < leftBound || *input > rightBound)) {
+			printf("ERROR: Input is not in the range of %d-%d - Please Try Again\n\n", leftBound, rightBound);
+			return false;
+		}
+	}
+	return true;
+}
+
+bool validateDateInput(int month, int day, int year) {
+	char* months[12] = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+	int days[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+	if (year % 4 == 0) days[1] = 29;
+
+	if (month < 0 || month > 12) {
+		printf("\nERROR: Month is not in the range of 1-12 - Please Try Again\n\n");
+		return false;
+	}
+
+	if (day < 1 || day > days[month-1]) {
+		printf("\nERROR: Day is not in the range of 1-%d for %s - Please Try Again\n\n", days[month-1], months[month-1]);
+		return false;
+	}
+
+	if (year < 0) {
+		printf("\nERROR: Year is not valid - Please Try Again\n\n");
+		return false;
+	}
+
+	return true;
+}
+
 void createFileName(char* file, char* fname, char* lname, char* phoneNumber) {
+	stringUnformatPhone(phoneNumber);
 	strcat(file, fname);
 	strcat(file, lname);
 	strcat(file, phoneNumber);
 	strcat(file, ".db");
+	stringFormatPhone(phoneNumber);
+	stringToLowercase(file);
 }
 
 void fillCustomerInfo(char *info, customer* newCustomer) {
@@ -206,4 +265,70 @@ void fillCustomerInfo(char *info, customer* newCustomer) {
 	newCustomer->tail = NULL;
 	newCustomer->hashNext = NULL;
 	newCustomer->linkedNext = NULL;
+}
+
+void fillTransactionInfo(char *info, transaction* newTransaction) {
+	sscanf(info, "%d%s%s%lf%lf%lf%s%s", &(newTransaction->id), newTransaction->serviceDate, newTransaction->service, &(newTransaction->totalAmount), &(newTransaction->paidAmount), &(newTransaction->owingAmount), newTransaction->dueDate, newTransaction->status);
+
+	stringSpaceOut(newTransaction->service);
+
+	newTransaction->hashNext = NULL;
+}
+
+void takeDateInput(char* userInput, char* prompt, int* month, int* day, int* year) {
+	bool valid = false;
+	while (!valid) {
+		strcpy(userInput, "");
+		while (!valid) {
+			printf("Enter %s Month: ", prompt);
+
+			fgets(userInput, 300, stdin);
+			userInput[strlen(userInput)-1] = '\0';
+
+			valid = validateIntegerInput(userInput, month, false, 0, 0);
+		}
+
+		valid = false;
+		strcpy(userInput, "");
+		while (!valid) {
+			printf("Enter %s Day: ", prompt);
+
+			fgets(userInput, 300, stdin);
+			userInput[strlen(userInput)-1] = '\0';
+
+			valid = validateIntegerInput(userInput, day, false, 0, 0);
+		}
+
+		valid = false;
+		strcpy(userInput, "");
+		while (!valid) {
+			printf("Enter %s Year: ", prompt);
+
+			fgets(userInput, 300, stdin);
+			userInput[strlen(userInput)-1] = '\0';
+
+			valid = validateIntegerInput(userInput, year, false, 0, 0);
+		}
+
+		valid = validateDateInput(*month, *day, *year);
+	}
+}
+
+void takeDoubleInput(char* userInput, char* prompt, double *input) {
+	bool valid = false;
+	strcpy(userInput, "");
+	*input = -1;
+	while (!valid) {
+		printf("%s", prompt);
+
+		fgets(userInput, 300, stdin);
+		userInput[strlen(userInput)-1] = '\0';
+
+		valid = validateDoubleInput(userInput, input, false, 0, 0);
+
+		if (*input < 0) {
+			printf("ERROR: Amount Cannot be Less Than Zero - Please Try Again\n\n");
+			valid = false;
+		}
+	}
 }
