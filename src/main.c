@@ -69,6 +69,7 @@ int main() {
 
 				break;
 			case 3:
+				createCustomer(customerMap, &head, &tail);
 				break;
 			case 4:
 				editTransaction(transactionMap, NULL);

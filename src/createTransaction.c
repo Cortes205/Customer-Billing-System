@@ -110,12 +110,18 @@ void createTransaction(transaction** transactionMap, customer* payor) {
 		FILE *fptr = fopen(transFile, "a+");
  		if (fptr == NULL) {
 			printf("ERROR: File Did Not Open - Please Try Again\n\n");
+			free(addition);
+			free(infoAddition);
+			addition = NULL;
+			infoAddition = NULL;
+			return;
 		}
 
 		char *info = formatTransactionInfo(addition);
 		fprintf(fptr, "%s\n", info);
-		fseek(fptr, 0, SEEK_END);
+		free(info);
 
+		fseek(fptr, 0, SEEK_END);
 		addition->filePosition = ftell(fptr);
 
 		fclose(fptr);
