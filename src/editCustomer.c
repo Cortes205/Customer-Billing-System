@@ -108,8 +108,13 @@ void editInfo(customer* customerProfile, customer** customerMap) {
 				customerProfile->fname[strlen(customerProfile->fname)-1] = '\0';
 				stringFormatName(customerProfile->fname);
 
-				changeTransFile = true;
-				hashChange = true;
+				if (hashSearchCustomerByPhone(customerMap, customerProfile->fname, customerProfile->lname, customerProfile->phoneNumber, getCustomerHashIndex(customerProfile->fname, customerProfile->lname))) {
+					printf("\nERROR: A Customer With This Name and Phone Number Already Exists - Please Try Again or Edit The Other Customer First\n\n");
+					strcpy(customerProfile->fname, oldFName);
+				} else {
+					changeTransFile = true;
+					hashChange = true;
+				}
 				break;
 			case 2:
 				printf("\nEnter New Last Name: ");
@@ -118,8 +123,13 @@ void editInfo(customer* customerProfile, customer** customerMap) {
 				customerProfile->lname[strlen(customerProfile->lname)-1] = '\0';
 				stringFormatName(customerProfile->lname);
 
-				changeTransFile = true;
-				hashChange = true;
+				if (hashSearchCustomerByPhone(customerMap, customerProfile->fname, customerProfile->lname, customerProfile->phoneNumber, getCustomerHashIndex(customerProfile->fname, customerProfile->lname))) {
+					printf("\nERROR: A Customer With This Name and Phone Number Already Exists - Please Try Again or Edit The Other Customer First\n\n");
+					strcpy(customerProfile->lname, oldLName);
+				} else {
+					changeTransFile = true;
+					hashChange = true;
+				}
 				break;
 			case 3:
 				printf("\nEnter New Address: ");
@@ -137,7 +147,12 @@ void editInfo(customer* customerProfile, customer** customerMap) {
 				stringUnformatPhone(customerProfile->phoneNumber);
 				stringFormatPhone(customerProfile->phoneNumber);
 
-				changeTransFile = true;
+				if (hashSearchCustomerByPhone(customerMap, customerProfile->fname, customerProfile->lname, customerProfile->phoneNumber, getCustomerHashIndex(customerProfile->fname, customerProfile->lname))) {
+					printf("\nERROR: A Customer With This Name and Phone Number Already Exists - Please Try Again or Edit The Other Customer First\n\n");
+					strcpy(customerProfile->phoneNumber, oldPhone);
+				} else {
+					changeTransFile = true;
+				}
 				break;
 			case 5:
 				printf("\nEnter New Email Address: ");
