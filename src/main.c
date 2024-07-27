@@ -71,6 +71,7 @@ int main() {
 			case 3:
 				break;
 			case 4:
+				editTransaction(transactionMap, NULL);
 				break;
 			case 5:
 				break;

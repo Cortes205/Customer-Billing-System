@@ -30,10 +30,14 @@ void editTransaction(transaction** transactionMap, customer* customerProfile) {
 
 		if (transactionInfo == NULL) {
 			printf("ERROR: This Transaction Does Not Exist - Please Try Again\n\n");
-		} else if (transactionInfo->payor != customerProfile) {
+		} else if (customerProfile != NULL && transactionInfo->payor != customerProfile) {
 			printf("ERROR: This Transaction Does Not Belong to %s %s - Please Try Again\n\n", customerProfile->fname, customerProfile->lname);
 			transactionInfo = NULL;
 		}
+	}
+
+	if (customerProfile == NULL) {
+		customerProfile = transactionInfo->payor;
 	}
 
 	char transFile[FILE_NAME_MAXLEN] = "customers/";
