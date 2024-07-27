@@ -62,7 +62,8 @@ void displayCustomers(customer* head);
 /* src/displayTransactions.c */
 bool displayTransactions(transactionNode* head, transaction** transactionMap);
 
-void createCustomer(customer** customerMap, customer** tail);
+/* src/createCustomer.c */
+void createCustomer(customer** customerMap, customer** head, customer** tail);
 
 /* src/editCustomer.c */
 void editCustomer(customer* customerProfile, customer** customerMap, transaction** transactionMap);
@@ -71,7 +72,9 @@ bool saveCustomerChanges(char file[FILE_NAME_MAXLEN], customer** customerMap, cu
 char* formatCustomerInfo(customer* customerProfile);
 void changeCustomerHashPosition(customer** customerMap, char* oldFName, char* oldLName, char* fname, char* lname, char* phoneNumber);
 
+/* src/createTransaction.c */
 void createTransaction(transaction** transactionMap, customer* payor);
+bool yesOrNo(char *string);
 
 /* src/editTransaction */
 void editTransaction(transaction** transactionMap, customer* customerProfile);

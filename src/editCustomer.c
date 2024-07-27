@@ -43,6 +43,7 @@ void editCustomer(customer* customerProfile, customer** customerMap, transaction
 				editTransaction(transactionMap, customerProfile);
  				break;
 			case 5:
+				createTransaction(transactionMap, customerProfile);
 				break;
 			case 6:
 				editing = false;

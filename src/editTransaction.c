@@ -107,6 +107,10 @@ void editTransaction(transaction** transactionMap, customer* customerProfile) {
 
 					valid = validateIntegerInput(userInput, &option, true, 100000, 999999);
 
+					if (!valid) {
+						continue;
+					}
+
 					unsigned long int possibleIndex = getTransactionHashIndex(option);
 					if (hashSearchTransaction(transactionMap, option, possibleIndex) != NULL) {
 						printf("\nERROR: The Transaction of ID %d Already Exists - Please Try Again or Edit That Transaction First\n\n", option);
