@@ -19,10 +19,9 @@ int main() {
 		printf("\t2. View a Customer's Profile\n");
 		printf("\t3. Create New Customer Profile\n");
 		printf("\t4. View a Transaction by ID\n");
-		printf("\t5. Display All Active Transactions by Customer\n");
-		printf("\t6. Display All Inactive Transactions by Customer\n");
-		printf("\t7. Display Transactions From a Specific Date\n");
-		printf("\t8. Exit\n\n");
+		printf("\t5. Display All Transactions by Status for Every Customer\n");
+		printf("\t6. Display Transactions From a Specific Date\n");
+		printf("\t7. Exit\n\n");
 
 		bool valid = false;
 		char userInput[300] = "";
@@ -33,10 +32,10 @@ int main() {
 			fgets(userInput, 300, stdin);
 			userInput[strlen(userInput)-1] = '\0';
 
-			valid = validateIntegerInput(userInput, &option, true, 1, 8);
+			valid = validateIntegerInput(userInput, &option, true, 1, 9);
 		}
 
-		if (option != 8) printf("\n");
+		if (option != 7) printf("\n");
 
 		unsigned long int index = 0;
 		char fname[NAME_MAXLEN] = "";
@@ -75,16 +74,22 @@ int main() {
 				editTransaction(transactionMap, NULL);
 				break;
 			case 5:
+				strcpy(userInput, "");
+				printf("Search by Status: ");
+
+				fgets(userInput, 300, stdin);
+				userInput[strlen(userInput)-1] = '\0';
+				stringToUppercase(userInput);
+
+				sortByLastName(&head, &tail);
+				displayByStatus(head, transactionMap, userInput);
 				break;
 			case 6:
 				break;
 			case 7:
-				break;
-			case 8:
 				running = false;
 				break;
 		}
-
 	}
 
 	freeData(&head, transactionMap);

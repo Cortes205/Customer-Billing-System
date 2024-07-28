@@ -100,6 +100,9 @@ customer* hashSearchCustomer(customer** customerMap, char fname[NAME_MAXLEN], ch
 customer* multipleCustomers(customer** customersOfName, int numCustomers);
 customer* hashSearchCustomerByPhone(customer** customerMap, char fname[NAME_MAXLEN], char lname[NAME_MAXLEN], char phoneNumber[PHONE_MAXLEN], int storageIndex);
 
+/* src/displayByStatus.c */
+void displayByStatus(customer* head, transaction** transactionMap, char* status);
+
 /* src/helpers.c */
 int sumDigits(int num);
 unsigned long int getCustomerHashIndex(char fname[NAME_MAXLEN], char lname[NAME_MAXLEN]);
