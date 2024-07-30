@@ -15,10 +15,10 @@ void sortByLastName(customer** head, customer** tail) {
 
 	sortByLastName(&left, &midpoint);
 	sortByLastName(&right, tail);
-	merge(left, right, head, tail);
+	mergeLinkedList(left, right, head, tail);
 }
 
-void merge(customer* left, customer* right, customer** head, customer** tail) {
+void mergeLinkedList(customer* left, customer* right, customer** head, customer** tail) {
 	customer* temp = calloc(1, sizeof(customer));
 	temp->linkedNext = NULL;
 	*tail = temp;

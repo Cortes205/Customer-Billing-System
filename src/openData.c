@@ -1,6 +1,6 @@
 #include "../include/header.h"
 
-bool openData(char fileName[FILE_NAME_MAXLEN], customer** head, customer** tail, customer** customerMap, transaction** transactionMap) {
+bool openData(char fileName[FILE_NAME_MAXLEN], customer** head, customer** tail, customer** customerMap, transaction** transactionMap, transaction*** transactionArray, int* transactionArraySize) {
 	FILE *fptr = fopen(fileName, "a+");
 	FILE *transPtr = NULL;
 	if (fptr == NULL) {
@@ -21,13 +21,12 @@ bool openData(char fileName[FILE_NAME_MAXLEN], customer** head, customer** tail,
 
 		if (temp == NULL) {
 			*head = newCustomer;
-			*tail = newCustomer;
 			temp = *head;
 		} else {
 			temp->linkedNext = newCustomer;
 			temp = temp->linkedNext;
-			*tail = temp;
 		}
+		*tail = newCustomer;
 
 		unsigned long int customerIndex = getCustomerHashIndex(newCustomer->fname, newCustomer->lname);
 		hashAddCustomer(customerMap, newCustomer, customerIndex);
@@ -47,7 +46,7 @@ bool openData(char fileName[FILE_NAME_MAXLEN], customer** head, customer** tail,
 			transBuffer[strlen(transBuffer)-1] = '\0';
 			transaction* newTransaction = calloc(1, sizeof(transaction));
 			transactionNode* newID = calloc(1, sizeof(transactionNode));
-			
+
 			fillTransactionInfo(transBuffer, newTransaction);
 
 			newTransaction->payor = newCustomer;
@@ -58,14 +57,18 @@ bool openData(char fileName[FILE_NAME_MAXLEN], customer** head, customer** tail,
 
 			if (newCustomer->head == NULL) {
 				newCustomer->head = newID;
-				newCustomer->tail = newID;
 			} else {
 				newCustomer->tail->next = newID;
-				newCustomer->tail = newID;
 			}
+			newCustomer->tail = newID;
+
 
 			unsigned long int transactionIndex = getTransactionHashIndex(newID->id);
 			hashAddTransaction(transactionMap, newTransaction, transactionIndex);
+
+			(*transactionArraySize)++;
+			*transactionArray = realloc(*transactionArray, (*transactionArraySize) * sizeof(transaction*));
+			(*transactionArray)[*transactionArraySize-1] = newTransaction;
 		}
 		fclose(transPtr);
 	}

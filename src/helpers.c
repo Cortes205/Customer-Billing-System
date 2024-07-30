@@ -173,6 +173,20 @@ void stringSpaceOut(char* string) {
 	strcpy(string, temp);
 }
 
+void stringReplace(char* string, char target, char replace) {
+	for (int i = 0; i < strlen(string); i++) {
+		if (string[i] == target) {
+			string[i] = replace;
+		}
+	}
+}
+
+void stringUnformatDate(char* string, int* month, int* day, int* year) {
+	stringReplace(string, '/', ' ');
+	sscanf(string, "%d%d%d", month, day, year);
+	stringReplace(string, ' ', '/');
+}
+
 bool isNAN(char* string, bool isDouble) {
 	bool hasDecimal = false;
 	for (int i = 0; i < strlen(string); i++) {

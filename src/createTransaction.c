@@ -1,6 +1,6 @@
 #include "../include/header.h"
 
-void createTransaction(transaction** transactionMap, customer* payor) {
+void createTransaction(transaction** transactionMap, customer* payor, transaction*** transactionArray, int* transactionArraySize) {
 	transaction* addition = calloc(1, sizeof(transaction));
 	transactionNode* infoAddition = calloc(1, sizeof(transaction));
 
@@ -103,6 +103,10 @@ void createTransaction(transaction** transactionMap, customer* payor) {
 		addition->payor = payor;
 		unsigned long int index = getTransactionHashIndex(addition->id);
 		hashAddTransaction(transactionMap, addition, index);
+
+		(*transactionArraySize)++;
+		*transactionArray = realloc(*transactionArray, *transactionArraySize * sizeof(transaction*));
+		(*transactionArray)[(*transactionArraySize)-1] = addition;
 
 		char transFile[FILE_NAME_MAXLEN] = "customers/";
 		createFileName(transFile, payor->fname, payor->lname, payor->phoneNumber);

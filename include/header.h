@@ -49,12 +49,19 @@ typedef struct transaction {
 #define HASH_SIZE 1000
 
 /* src/openData.c */
-bool openData(char fileName[FILE_NAME_MAXLEN], customer** head, customer** tail, customer** customerMap, transaction** transactionMap);
+bool openData(char fileName[FILE_NAME_MAXLEN], customer** head, customer** tail, customer** customerMap, transaction** transactionMap, transaction*** transactionArray, int* transactionArraySize);
 
 /* src/sortLinkedList.c */
 void sortByLastName(customer** head, customer** tail);
-void merge(customer* left, customer* right, customer** head, customer** tail);
+void mergeLinkedList(customer* left, customer* right, customer** head, customer** tail);
 customer* middleNode(customer* head);
+
+/* src/sortArray.c */
+void sortByDate(transaction** transactionArray, int transactionArraySize);
+void mergeArray(transaction** left, int leftSize, transaction** right, int rightSize, transaction** transactionArray);
+
+/* src/searchArray.c */
+bool searchByDate(transaction** transactionArray, int transactionArraySize, int targetMonth, int targetDay, int targetYear, int* left, int* right);
 
 /* src/displayCustomers.c */
 void displayCustomers(customer* head);
@@ -66,14 +73,14 @@ bool displayTransactions(transactionNode* head, transaction** transactionMap);
 void createCustomer(customer** customerMap, customer** head, customer** tail);
 
 /* src/editCustomer.c */
-void editCustomer(customer* customerProfile, customer** customerMap, transaction** transactionMap);
+void editCustomer(customer* customerProfile, customer** customerMap, transaction** transactionMap, transaction*** transactionArray, int* transactionArraySize);
 void editInfo(customer* customerProfile, customer** customerMap);
 bool saveCustomerChanges(char file[FILE_NAME_MAXLEN], customer** customerMap, customer* customerProfile);
 char* formatCustomerInfo(customer* customerProfile);
 void changeCustomerHashPosition(customer** customerMap, char* oldFName, char* oldLName, char* fname, char* lname, char* phoneNumber);
 
 /* src/createTransaction.c */
-void createTransaction(transaction** transactionMap, customer* payor);
+void createTransaction(transaction** transactionMap, customer* payor, transaction*** transactionArray, int* transactionArraySize);
 bool yesOrNo(char *string);
 
 /* src/editTransaction */
@@ -117,6 +124,8 @@ void stringFormatPhone(char* string);
 void stringUnformatPhone(char* string);
 void stringFormatName(char* string);
 void stringSpaceOut(char* string);
+void stringReplace(char* string, char target, char replace);
+void stringUnformatDate(char* string, int* month, int* day, int* year);
 bool isNAN(char* string, bool isDouble);
 bool validateIntegerInput(char* string, int* input, bool bounds, int leftBound, int rightBound);
 bool validateDoubleInput(char* string, double* input, bool bounds, int leftBound, int rightBound);

@@ -1,6 +1,6 @@
 #include "../include/header.h"
 
-void editCustomer(customer* customerProfile, customer** customerMap, transaction** transactionMap) {
+void editCustomer(customer* customerProfile, customer** customerMap, transaction** transactionMap, transaction*** transactionArray, int* transactionArraySize) {
 	bool editing = true;
 	printf("\nOpening Profile...\n");
 
@@ -43,7 +43,7 @@ void editCustomer(customer* customerProfile, customer** customerMap, transaction
 				editTransaction(transactionMap, customerProfile);
  				break;
 			case 5:
-				createTransaction(transactionMap, customerProfile);
+				createTransaction(transactionMap, customerProfile, transactionArray, transactionArraySize);
 				break;
 			case 6:
 				editing = false;

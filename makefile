@@ -1,5 +1,5 @@
-customerManager: main.o openData.o freeData.o createCustomer.o editCustomer.o createTransaction.o editTransaction.o hashAddCustomer.o hashSearchCustomer.o hashAddTransaction.o hashSearchTransaction.o displayCustomers.o displayTransactions.o displayByStatus.o sortLinkedList.o helpers.o
-	gcc -std=c99 -Wall objectFiles/main.o objectFiles/openData.o objectFiles/freeData.o objectFiles/createCustomer.o objectFiles/editCustomer.o objectFiles/createTransaction.o objectFiles/editTransaction.o objectFiles/hashAddCustomer.o objectFiles/hashSearchCustomer.o objectFiles/hashAddTransaction.o objectFiles/hashSearchTransaction.o objectFiles/displayCustomers.o objectFiles/displayTransactions.o objectFiles/displayByStatus.o objectFiles/sortLinkedList.o objectFiles/helpers.o -o bin/customerManager
+customerManager: main.o openData.o freeData.o createCustomer.o editCustomer.o createTransaction.o editTransaction.o hashAddCustomer.o hashSearchCustomer.o hashAddTransaction.o hashSearchTransaction.o displayCustomers.o displayTransactions.o displayByStatus.o sortLinkedList.o sortArray.o searchArray.o helpers.o
+	gcc -std=c99 -Wall objectFiles/main.o objectFiles/openData.o objectFiles/freeData.o objectFiles/createCustomer.o objectFiles/editCustomer.o objectFiles/createTransaction.o objectFiles/editTransaction.o objectFiles/hashAddCustomer.o objectFiles/hashSearchCustomer.o objectFiles/hashAddTransaction.o objectFiles/hashSearchTransaction.o objectFiles/displayCustomers.o objectFiles/displayTransactions.o objectFiles/displayByStatus.o objectFiles/sortLinkedList.o objectFiles/sortArray.o objectFiles/searchArray.o objectFiles/helpers.o -o bin/customerManager
 
 main.o: src/main.c include/header.h
 	gcc -std=c99 -Wall -c src/main.c -o objectFiles/main.o
@@ -45,6 +45,12 @@ displayByStatus.o: src/displayByStatus.c include/header.h
 
 sortLinkedList.o: src/sortLinkedList.c include/header.h
 	gcc -std=c99 -Wall -c src/sortLinkedList.c -o objectFiles/sortLinkedList.o
+
+sortArray.o: src/sortArray.c include/header.h
+	gcc -std=c99 -Wall -c src/sortArray.c -o objectFiles/sortArray.o
+
+searchArray.o: src/searchArray.c include/header.h
+	gcc -std=c99 -Wall -c src/searchArray.c -o objectFiles/searchArray.o
 
 helpers.o: src/helpers.c include/header.h
 	gcc -std=c99 -Wall -c src/helpers.c -o objectFiles/helpers.o

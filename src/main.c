@@ -3,13 +3,16 @@
 int main() {
 	printf("=== Customer Billing System ===\n\n");
 
+	int transactionArraySize = 0;
+	transaction** transactionArray = calloc(0, sizeof(transaction*));
+
 	transaction** transactionMap = calloc(HASH_SIZE, sizeof(transaction*));
 	customer** customerMap = calloc(HASH_SIZE, sizeof(customer*));
 	customer* head = NULL;
 	customer* tail = NULL;
 
 	bool running = true;
-	if (!openData("customers.db", &head, &tail, customerMap, transactionMap)) {
+	if (!openData("customers.db", &head, &tail, customerMap, transactionMap, &transactionArray, &transactionArraySize)) {
 		running = false;
 	}
 
@@ -64,7 +67,7 @@ int main() {
 					break;
 				}
 
-				editCustomer(currentCustomer, customerMap, transactionMap);
+				editCustomer(currentCustomer, customerMap, transactionMap, &transactionArray, &transactionArraySize);
 
 				break;
 			case 3:
@@ -85,6 +88,25 @@ int main() {
 				displayByStatus(head, transactionMap, userInput);
 				break;
 			case 6:
+				sortByDate(transactionArray, transactionArraySize);
+				int left = 0, right = -1;
+
+				int month = 0, day = 0, year = 0;
+				char date[DATE_MAXLEN] = "";
+				takeDateInput(userInput, "Service", &month, &day, &year);
+				sprintf(date, "%d/%d/%d", month, day, year);
+
+				if (!searchByDate(transactionArray, transactionArraySize, month, day, year, &left, &right)) {
+					printf("\nThere are no Transactions From %s\n\n", date);
+				} else {
+					printf("\nTransactions from %s:\n\n", date);
+				}
+
+				for (int i = left; i <= right; i++) {
+					displayTransactionInfo(transactionArray[i]);
+					printf("\n");
+				}
+
 				break;
 			case 7:
 				running = false;
@@ -95,5 +117,6 @@ int main() {
 	freeData(&head, transactionMap);
 	free(transactionMap);
 	free(customerMap);
+	free(transactionArray);
 	return 0;
 }
