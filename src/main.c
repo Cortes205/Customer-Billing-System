@@ -103,6 +103,7 @@ int main() {
 				}
 
 				for (int i = left; i <= right; i++) {
+					printf("\t\tPayor: %s %s\n", transactionArray[i]->payor->fname, transactionArray[i]->payor->lname);
 					displayTransactionInfo(transactionArray[i]);
 					printf("\n");
 				}
