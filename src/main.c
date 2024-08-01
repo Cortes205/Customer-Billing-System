@@ -3,11 +3,15 @@
 int main() {
 	printf("=== Customer Billing System ===\n\n");
 
+	/* Sequential Array of Pointers Pointing to All Transactions */
 	int transactionArraySize = 0;
 	transaction** transactionArray = calloc(0, sizeof(transaction*));
 
+	/* Array of Pointers Pointing to All Transactions and Customers (to be Stored at Hashed Indicies) */
 	transaction** transactionMap = calloc(HASH_SIZE, sizeof(transaction*));
 	customer** customerMap = calloc(HASH_SIZE, sizeof(customer*));
+
+	/* Head and Tail of Customer Linked List */
 	customer* head = NULL;
 	customer* tail = NULL;
 
@@ -35,15 +39,18 @@ int main() {
 			fgets(userInput, 300, stdin);
 			userInput[strlen(userInput)-1] = '\0';
 
-			valid = validateIntegerInput(userInput, &option, true, 1, 9);
+			/* Store the Valid Integer in Option (call by ref.) */
+			valid = validateIntegerInput(userInput, &option, true, 1, 7);
 		}
 
 		if (option != 7) printf("\n");
 
+		/* Variables to be Used in Certain Cases */
 		unsigned long int index = 0;
 		char fname[NAME_MAXLEN] = "";
 		char lname[NAME_MAXLEN] = "";
 		customer* currentCustomer = NULL;
+
 		switch(option) {
 			case 1:
 				sortByLastName(&head, &tail);
@@ -89,9 +96,15 @@ int main() {
 				break;
 			case 6:
 				sortByDate(transactionArray, transactionArraySize);
+
+				/* Left is the first occurence of the date - Right is the last */
+				/* Initialized this way so that if no transactions are found,
+				no values are returned and the for-loop does not run below */
 				int left = 0, right = -1;
 
+				/* To be assigned - call by reference */
 				int month = 0, day = 0, year = 0;
+
 				char date[DATE_MAXLEN] = "";
 				takeDateInput(userInput, "Service", &month, &day, &year);
 				sprintf(date, "%d/%d/%d", month, day, year);

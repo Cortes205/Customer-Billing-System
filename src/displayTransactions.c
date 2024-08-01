@@ -11,6 +11,7 @@ bool displayTransactions(transactionNode* head, transaction** transactionMap) {
 		transaction* currentTransaction = hashSearchTransaction(transactionMap, head->id, index);
 
 		if (currentTransaction == NULL) {
+			/* This should never happen unless something is very wrong */
 			printf("\nFATAL ERROR: Transaction of the ID %d Does not Exist in the Database - Double Check the Invoices and Report This Potential Bug\n", head->id);
 		} else {
 			printf("\nTransaction #%d:\n", transCount);

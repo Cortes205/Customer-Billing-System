@@ -1,5 +1,6 @@
 #include "../include/header.h"
 
+/* Binary Search */
 bool searchByDate(transaction** transactionArray, int transactionArraySize, int targetMonth, int targetDay, int targetYear, int* left, int* right) {
 	bool found = false;
 	int l = 0, r = transactionArraySize-1, m = 0;
@@ -9,6 +10,8 @@ bool searchByDate(transaction** transactionArray, int transactionArraySize, int 
 		int month = 0, day = 0, year = 0;
 		stringUnformatDate(transactionArray[m]->serviceDate, &month, &day, &year);
 
+		/* Compare year first, then month, then day; best way to
+		see which date comes first */
 		if (year == targetYear) {
 			if (month == targetMonth) {
 				if (day == targetDay) {
@@ -20,6 +23,7 @@ bool searchByDate(transaction** transactionArray, int transactionArraySize, int 
 					char tempDate[DATE_MAXLEN] = "";
 					sprintf(tempDate, "%d/%d/%d", month, day, year);
 
+					/* Find first and last occurence of this date */
 					while (*left >= 0 && strcmp(transactionArray[*left]->serviceDate, tempDate) == 0) {
 						(*left)--;
 					}

@@ -1,8 +1,10 @@
 #include "../include/header.h"
 
 void displayByStatus(customer* customerProfile, transaction** transactionMap, char* status) {
+	/* Cycle through LinkedList of customerProfiles */
 	while (customerProfile != NULL) {
 		printf("%s, %s: \n\n", customerProfile->lname, customerProfile->fname);
+
 		int numTransactions = 0;
 		transactionNode* temp = customerProfile->head;
 		while (temp != NULL) {

@@ -53,12 +53,15 @@ void editCustomer(customer* customerProfile, customer** customerMap, transaction
 }
 
 void editInfo(customer* customerProfile, customer** customerMap) {
+	/* Made true if this task is needed to be done */
 	bool changeTransFile = false;
 	bool hashChange = false;
 	bool saveAll = false;
 
 	char transFile[FILE_NAME_MAXLEN] = "customers/";
 	char newTransFile[FILE_NAME_MAXLEN] = "customers/";
+
+	/* Keeping copies of old info in case changes are made then discarded */
 
 	char oldFName[NAME_MAXLEN] = "";
 	char oldLName[NAME_MAXLEN] = "";
@@ -182,6 +185,7 @@ void editInfo(customer* customerProfile, customer** customerMap) {
 			changeCustomerHashPosition(customerMap, oldFName, oldLName, customerProfile->fname, customerProfile->lname, customerProfile->phoneNumber);
 		}
 	} else {
+		/* If changes are discarded, copy back old info */
 		strcpy(customerProfile->fname, oldFName);
 		strcpy(customerProfile->lname, oldLName);
 		strcpy(customerProfile->address, oldAddress);
@@ -202,17 +206,23 @@ bool saveCustomerChanges(char file[FILE_NAME_MAXLEN], customer** customerMap, cu
 	fseek(tempFptr, 0, SEEK_SET);
 
 	char buffer[300] = "";
+	/* This is the offset of file positioning */
 	int addition = 0;
+	/* Copy all customer info to a new file EXCEPT for the old customer info 
+	replace it with the new info */
 	while (fgets(buffer, 300, fptr)) {
 		if (ftell(fptr) == customerProfile->filePosition) {
 			char* info = formatCustomerInfo(customerProfile);
 			fprintf(tempFptr, "%s\n", info);
+			/* This is how many bytes info after the new info will be offset by */
 			addition = strlen(info) - strlen(buffer) + 1;
 			customerProfile->filePosition = ftell(fptr) + addition;
 			free(info);
 		} else {
+			/* No new line because fgets already has it */
 			fprintf(tempFptr, "%s", buffer);
 
+			/* Get the customer node and set its file position with the offset */
 			customer* customerToChange = calloc(1, sizeof(customer));
 			fillCustomerInfo(buffer, customerToChange);
 			unsigned long int index = getCustomerHashIndex(customerToChange->fname, customerToChange->lname);
@@ -225,6 +235,7 @@ bool saveCustomerChanges(char file[FILE_NAME_MAXLEN], customer** customerMap, cu
 		}
 	}
 
+	/* Remove old file, rename temp file to be name of old file */
 	remove(file);
 	rename("temp.db", file);
 
@@ -233,6 +244,7 @@ bool saveCustomerChanges(char file[FILE_NAME_MAXLEN], customer** customerMap, cu
 	return true;
 }
 
+/* Formatted for file */
 char* formatCustomerInfo(customer* customerProfile) {
 	char* info = calloc(300, sizeof(char));
 
@@ -252,6 +264,7 @@ void changeCustomerHashPosition(customer** customerMap, char* oldFName, char* ol
 	customer* temp = customerMap[index];
 	while (temp != NULL) {
 		if (strcmp(temp->fname, fname) == 0 && strcmp(temp->lname, lname) == 0 && strcmp(temp->phoneNumber, phoneNumber) == 0) {
+			/* Disconnect node from HashMap */
 			if (tempPrev == NULL) {
 				customerMap[index] = temp->hashNext;
 			} else {
@@ -264,6 +277,7 @@ void changeCustomerHashPosition(customer** customerMap, char* oldFName, char* ol
 		temp = temp->hashNext;
 	}
 
+	/* Reinsert the disconnected node */
 	unsigned long int newIndex = getCustomerHashIndex(fname, lname);
 	hashAddCustomer(customerMap, temp, newIndex);
 }

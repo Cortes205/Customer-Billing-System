@@ -48,6 +48,7 @@ void displayTransactionInfo(transaction* transactionInfo) {
 
 void stringToLowercase(char* string) {
 	for (int i = 0; i < strlen(string); i++) {
+		/* If uppercase, then shift down */
 		if (string[i] > 64 && string[i] < 91) {
 			string[i] += 32;
 		}
@@ -56,6 +57,7 @@ void stringToLowercase(char* string) {
 
 void stringToUppercase(char* string) {
 	for (int i = 0; i < strlen(string); i++) {
+		/* If lowercase, then shift up*/
 		if (string[i] > 96 && string[i] < 123) {
 			string[i] -= 32;
 		}
@@ -65,10 +67,13 @@ void stringToUppercase(char* string) {
 void stringUppercaseAfterSpace(char* string) {
 	for (int i = 0; i < strlen(string); i++) {
 		if (i == 0) {
+			/* If lowercase at the start, then shift up */
 			if (string[i] > 96 && string[i] < 123) {
 				string[i] -= 32;
 			}
+		/* If there is a space before the ith letter */
 		} else if (string[i-1] == 32) {
+			/* If lowercase, then shfit up */
 			if (string[i] > 96 && string[i] < 123) {
 				string[i] -= 32;
 			}
@@ -79,6 +84,7 @@ void stringUppercaseAfterSpace(char* string) {
 void stringUnspace(char* string) {
 	char temp[500] = "";
 	int j = 0;
+	/* Copy letter by letter but skip spaces */
 	for (int i = 0; i < strlen(string); i++) {
 		if (string[i] != 32) {
 			temp[j] = string[i];
@@ -86,6 +92,8 @@ void stringUnspace(char* string) {
 		}
 	}
 	temp[strlen(temp)] = '\0';
+
+	/* Overwrite old string - avoiding storage on the heap */
 	strcpy(string, temp);
 }
 
@@ -119,10 +127,12 @@ void stringFormatPhone(char* string) {
 	strcpy(string, temp);
 }
 
+/* Good function to also get rid of non-digit input */
 void stringUnformatPhone(char* string) {
 	char temp[PHONE_MAXLEN] = "";
 	int j = 0;
 	for (int i = 0; i < strlen(string); i++) {
+		/* If the ith char is a digit, copy it */
 		if (string[i] > 47 && string[i] < 58) {
 			temp[j] = string[i];
 			j++;
@@ -138,11 +148,13 @@ void stringFormatName(char* string) {
 			if (i == 0) {
 				string[i] -= 32;
 				continue;
-			/* ASCII 39 = ' */
+			/* ASCII 39 = ' - Formats names like O'Callaghan */
 			} else if (string[i-1] == ' ' || string[i-1] == 39) {
 				string[i] -= 32;
+			/* Formats names like McPhee*/
 			} else if (i == 2 && string[0] == 'M' && string[1] == 'c') {
 				string[i] -= 32;
+			/* Formats names like MacTavish */
 			} else if (i == 3 && string[0] == 'M' && string[1] == 'a' && string[2] == 'c') {
 				string[i] -= 32;
 			}
@@ -158,10 +170,12 @@ void stringFormatName(char* string) {
 	}
 }
 
+/* Make spaces before capital letters */
 void stringSpaceOut(char* string) {
 	char temp[500] = "";
 	int j = 0;
     for (int i = 0; i < strlen(string); i++) {
+		/* If uppercase and not beginning, insert space */
 		if (string[i] > 64 && string[i] < 91 && i != 0) {
 			temp[j] = 32;
 			j++;
@@ -190,6 +204,7 @@ void stringUnformatDate(char* string, int* month, int* day, int* year) {
 bool isNAN(char* string, bool isDouble) {
 	bool hasDecimal = false;
 	for (int i = 0; i < strlen(string); i++) {
+		/* If the ith char is something other than a digit */
 		if (string[i] < 48 || string[i] > 57) {
 
 			if (i == 0 && string[i] == '-') {
@@ -268,6 +283,7 @@ void createFileName(char* file, char* fname, char* lname, char* phoneNumber) {
 	stringToLowercase(file);
 }
 
+/* Sets up customer node */
 void fillCustomerInfo(char *info, customer* newCustomer) {
 	sscanf(info, "%s%s%s%s%s", newCustomer->fname, newCustomer->lname, newCustomer->address, newCustomer->phoneNumber, newCustomer->email);
 
@@ -281,6 +297,7 @@ void fillCustomerInfo(char *info, customer* newCustomer) {
 	newCustomer->linkedNext = NULL;
 }
 
+/* Sets up transaction node */
 void fillTransactionInfo(char *info, transaction* newTransaction) {
 	sscanf(info, "%d%s%s%lf%lf%lf%s%s", &(newTransaction->id), newTransaction->serviceDate, newTransaction->service, &(newTransaction->totalAmount), &(newTransaction->paidAmount), &(newTransaction->owingAmount), newTransaction->dueDate, newTransaction->status);
 

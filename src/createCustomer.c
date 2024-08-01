@@ -81,20 +81,26 @@ void createCustomer(customer** customerMap, customer** head, customer** tail) {
 			printf("Is This Info Correct (Y/N)? ");
 			fgets(userInput, 300, stdin);
 			userInput[strlen(userInput)-1] = '\0';
+
+			/* Confirming = False if input == 'Y' || input == 'N' */
 			confirming = yesOrNo(userInput);
 
+			/* But if userInput == 'N' */
 			if (strcmp(userInput, "N") == 0) {
 				while (!valid) {
 					printf("Would You Like to Try Again (Y/N)? ");
 					fgets(userInput, 300, stdin);
 					userInput[strlen(userInput)-1] = '\0';
+					/* Since yesOrNo returns false for a valid option, ! makes it return true */
 					valid = !yesOrNo(userInput);
+					/* If valid = true, make creating false */
 					creating = !valid;
 				}
 
+				/* But if userInput == 'Y' then creating = true */
 				if (strcmp(userInput, "Y") == 0) {
 					creating = true;
-				} 
+				}
 			} else if (!confirming) {
 				creating = false;
 				saveInfo = true;
@@ -104,7 +110,9 @@ void createCustomer(customer** customerMap, customer** head, customer** tail) {
 		}
 	}
 
+	/* Choose whether or not save or delete new customer */
 	if (saveInfo) {
+		/* Add new customer to LinkedList */
 		if (*head == NULL) {
 			*head = addition;
 			*tail = addition;
@@ -120,6 +128,7 @@ void createCustomer(customer** customerMap, customer** head, customer** tail) {
 
 		addition->linkedNext = NULL;
 
+		/* Write customer to file */
 		FILE* fptr = fopen("customers.db", "a+");
 		if (fptr == NULL) {
 			printf("ERROR: File Did Not Open - Please Try Again\n\n");
@@ -137,11 +146,13 @@ void createCustomer(customer** customerMap, customer** head, customer** tail) {
 
 		fclose(fptr);
 
+		/* Create transaction file for customer */
 		char transFile[FILE_NAME_MAXLEN] = "customers/";
 		createFileName(transFile, addition->fname, addition->lname, addition->phoneNumber);
 
 		fptr = fopen(transFile, "a+");
 		if (fptr != NULL) {
+			/* Shouldn't be null, but good to check */
 			fclose(fptr);
 		}
 

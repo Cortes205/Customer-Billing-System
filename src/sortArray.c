@@ -1,8 +1,10 @@
 #include "../include/header.h"
 
+/* Merge Sort */
 void sortByDate(transaction** transactionArray, int transactionArraySize) {
 	if (transactionArraySize < 2) return;
 
+	/* Split the array into two subarrays */
 	int middle = transactionArraySize / 2;
 	int leftSize = middle;
 	int rightSize = transactionArraySize - middle;
@@ -39,6 +41,8 @@ void mergeArray(transaction** left, int leftSize, transaction** right, int right
 		stringUnformatDate(left[i]->serviceDate, &leftMonth, &leftDay, &leftYear);
 		stringUnformatDate(right[i]->serviceDate, &rightMonth, &rightDay, &rightYear);
 
+		/* Compare the year first, then the month, then the day;
+		best way to see what date comes first */
 		if (leftYear == rightYear) {
 			if (leftMonth == rightMonth) {
 				if (leftDay <= rightDay) {
@@ -62,9 +66,10 @@ void mergeArray(transaction** left, int leftSize, transaction** right, int right
 			transactionArray[k] = right[j];
 			j++;
 		}
-
 		k++;
 	}
+
+	/* Get remainder of whichever array still has transactions */
 
 	while (i < leftSize) {
 		transactionArray[k] = left[i];
