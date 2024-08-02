@@ -31,7 +31,7 @@ void mergeLinkedList(customer* left, customer* right, customer** head, customer*
 		stringToLowercase(left->lname);
 		stringToLowercase(right->lname);
 
-		/* Cycle throught the letters of each name w/o going out of bounds */
+		/* Cycle through the letters of each name w/o going out of bounds */
 		for (int i = 0; i < strlen(left->lname) && i < strlen(right->lname); i++) {
 			if (left->lname[i] == right->lname[i]) {
 				/* If everything is equal but we've reached the end of the left last name; this one goes first */

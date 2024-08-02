@@ -107,14 +107,15 @@ void editInfo(customer* customerProfile, customer** customerMap) {
 			case 1:
 				printf("\nEnter New First Name: ");
 
-				fgets(customerProfile->fname, NAME_MAXLEN, stdin);
-				customerProfile->fname[strlen(customerProfile->fname)-1] = '\0';
-				stringFormatName(customerProfile->fname);
+				strcpy(userInput, "");
+				fgets(userInput, NAME_MAXLEN, stdin);
+				userInput[strlen(userInput)-1] = '\0';
+				stringFormatName(userInput);
 
-				if (hashSearchCustomerByPhone(customerMap, customerProfile->fname, customerProfile->lname, customerProfile->phoneNumber, getCustomerHashIndex(customerProfile->fname, customerProfile->lname))) {
+				if (hashSearchCustomerByPhone(customerMap, userInput, customerProfile->lname, customerProfile->phoneNumber, getCustomerHashIndex(userInput, customerProfile->lname))) {
 					printf("\nERROR: A Customer With This Name and Phone Number Already Exists - Please Try Again or Edit The Other Customer First\n\n");
-					strcpy(customerProfile->fname, oldFName);
 				} else {
+					strcpy(customerProfile->fname, userInput);
 					changeTransFile = true;
 					hashChange = true;
 				}
@@ -122,14 +123,15 @@ void editInfo(customer* customerProfile, customer** customerMap) {
 			case 2:
 				printf("\nEnter New Last Name: ");
 
-				fgets(customerProfile->lname, NAME_MAXLEN, stdin);
-				customerProfile->lname[strlen(customerProfile->lname)-1] = '\0';
-				stringFormatName(customerProfile->lname);
+				strcpy(userInput, "");
+				fgets(userInput, NAME_MAXLEN, stdin);
+				userInput[strlen(userInput)-1] = '\0';
+				stringFormatName(userInput);
 
-				if (hashSearchCustomerByPhone(customerMap, customerProfile->fname, customerProfile->lname, customerProfile->phoneNumber, getCustomerHashIndex(customerProfile->fname, customerProfile->lname))) {
+				if (hashSearchCustomerByPhone(customerMap, customerProfile->fname, userInput, customerProfile->phoneNumber, getCustomerHashIndex(customerProfile->fname, userInput))) {
 					printf("\nERROR: A Customer With This Name and Phone Number Already Exists - Please Try Again or Edit The Other Customer First\n\n");
-					strcpy(customerProfile->lname, oldLName);
 				} else {
+					strcpy(customerProfile->lname, userInput);
 					changeTransFile = true;
 					hashChange = true;
 				}
@@ -144,16 +146,17 @@ void editInfo(customer* customerProfile, customer** customerMap) {
 			case 4:
 				printf("\nEnter New Phone Number: ");
 
-				fgets(customerProfile->phoneNumber, PHONE_MAXLEN, stdin);
-				customerProfile->phoneNumber[strlen(customerProfile->phoneNumber)-1] = '\0';
+				strcpy(userInput, "");
+				fgets(userInput, PHONE_MAXLEN, stdin);
+				userInput[strlen(userInput)-1] = '\0';
 
-				stringUnformatPhone(customerProfile->phoneNumber);
-				stringFormatPhone(customerProfile->phoneNumber);
+				stringUnformatPhone(userInput);
+				stringFormatPhone(userInput);
 
-				if (hashSearchCustomerByPhone(customerMap, customerProfile->fname, customerProfile->lname, customerProfile->phoneNumber, getCustomerHashIndex(customerProfile->fname, customerProfile->lname))) {
+				if (hashSearchCustomerByPhone(customerMap, customerProfile->fname, customerProfile->lname, userInput, getCustomerHashIndex(customerProfile->fname, customerProfile->lname))) {
 					printf("\nERROR: A Customer With This Name and Phone Number Already Exists - Please Try Again or Edit The Other Customer First\n\n");
-					strcpy(customerProfile->phoneNumber, oldPhone);
 				} else {
+					strcpy(customerProfile->phoneNumber, userInput);
 					changeTransFile = true;
 				}
 				break;
