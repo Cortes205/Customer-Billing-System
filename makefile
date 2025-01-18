@@ -1,59 +1,66 @@
-customerManager: main.o openData.o freeData.o createCustomer.o editCustomer.o createTransaction.o editTransaction.o hashAddCustomer.o hashSearchCustomer.o hashAddTransaction.o hashSearchTransaction.o displayCustomers.o displayTransactions.o displayByStatus.o sortLinkedList.o sortArray.o searchArray.o helpers.o
-	gcc -std=c99 -Wall objectFiles/main.o objectFiles/openData.o objectFiles/freeData.o objectFiles/createCustomer.o objectFiles/editCustomer.o objectFiles/createTransaction.o objectFiles/editTransaction.o objectFiles/hashAddCustomer.o objectFiles/hashSearchCustomer.o objectFiles/hashAddTransaction.o objectFiles/hashSearchTransaction.o objectFiles/displayCustomers.o objectFiles/displayTransactions.o objectFiles/displayByStatus.o objectFiles/sortLinkedList.o objectFiles/sortArray.o objectFiles/searchArray.o objectFiles/helpers.o -o bin/customerManager
+OBJ = createCustomer.o createTransaction.o displayByStatus.o displayCustomers.o displayTransactions.o editCustomer.o editTransaction.o freeData.o hashAddCustomer.o hashAddTransaction.o hashSearchCustomer.o hashSearchTransaction.o helpers.o main.o openData.o searchArray.o sortArray.o sortLinkedList.o
+OUT = customerManager
+HEADS = include/header.h
+CFLAGS = gcc -std=c99 -Wall
 
-main.o: src/main.c include/header.h
-	gcc -std=c99 -Wall -c src/main.c -o objectFiles/main.o
+all: ${OUT}
 
-openData.o: src/openData.c include/header.h
-	gcc -std=c99 -Wall -c src/openData.c -o objectFiles/openData.o
+${OUT}: ${OBJ}
+	${CFLAGS} ${OBJ} -o bin/${OUT}
 
-freeData.o: src/freeData.c include/header.h
-	gcc -std=c99 -Wall -c src/freeData.c -o objectFiles/freeData.o
+createCustomer.o: src/createCustomer.c ${HEADS}
+	${CFLAGS} -c src/createCustomer.c
 
-createCustomer.o: src/createCustomer.c include/header.h
-	gcc -std=c99 -Wall -c src/createCustomer.c -o objectFiles/createCustomer.o
+createTransaction.o: src/createTransaction.c ${HEADS}
+	${CFLAGS} -c src/createTransaction.c
 
-editCustomer.o: src/editCustomer.c include/header.h
-	gcc -std=c99 -Wall -c src/editCustomer.c -o objectFiles/editCustomer.o
+displayByStatus.o: src/displayByStatus.c ${HEADS}
+	${CFLAGS} -c src/displayByStatus.c
 
-createTransaction.o: src/createTransaction.c include/header.h
-	gcc -std=c99 -Wall -c src/createTransaction.c -o objectFiles/createTransaction.o
+displayCustomers.o: src/displayCustomers.c ${HEADS}
+	${CFLAGS} -c src/displayCustomers.c
 
-editTransaction.o: src/editTransaction.c include/header.h
-	gcc -std=c99 -Wall -c src/editTransaction.c -o objectFiles/editTransaction.o
+displayTransactions.o: src/displayTransactions.c ${HEADS}
+	${CFLAGS} -c src/displayTransactions.c
 
-hashAddCustomer.o: src/hashAddCustomer.c include/header.h
-	gcc -std=c99 -Wall -c src/hashAddCustomer.c -o objectFiles/hashAddCustomer.o
+editCustomer.o: src/editCustomer.c ${HEADS}
+	${CFLAGS} -c src/editCustomer.c
 
-hashSearchCustomer.o: src/hashSearchCustomer.c include/header.h
-	gcc -std=c99 -Wall -c src/hashSearchCustomer.c -o objectFiles/hashSearchCustomer.o
+editTransaction.o: src/editTransaction.c ${HEADS}
+	${CFLAGS} -c src/editTransaction.c
 
-hashAddTransaction.o: src/hashAddTransaction.c include/header.h
-	gcc -std=c99 -Wall -c src/hashAddTransaction.c -o objectFiles/hashAddTransaction.o
+freeData.o: src/freeData.c ${HEADS}
+	${CFLAGS} -c src/freeData.c
 
-hashSearchTransaction.o: src/hashSearchTransaction.c include/header.h
-	gcc -std=c99 -Wall -c src/hashSearchTransaction.c -o objectFiles/hashSearchTransaction.o
+hashAddCustomer.o: src/hashAddCustomer.c ${HEADS}
+	${CFLAGS} -c src/hashAddCustomer.c
 
-displayCustomers.o: src/displayCustomers.c include/header.h
-	gcc -std=c99 -Wall -c src/displayCustomers.c -o objectFiles/displayCustomers.o
+hashAddTransaction.o: src/hashAddTransaction.c ${HEADS}
+	${CFLAGS} -c src/hashAddTransaction.c
 
-displayTransactions.o: src/displayTransactions.c include/header.h
-	gcc -std=c99 -Wall -c src/displayTransactions.c -o objectFiles/displayTransactions.o
+hashSearchCustomer.o: src/hashSearchCustomer.c ${HEADS}
+	${CFLAGS} -c src/hashSearchCustomer.c
 
-displayByStatus.o: src/displayByStatus.c include/header.h
-	gcc -std=c99 -Wall -c src/displayByStatus.c -o objectFiles/displayByStatus.o
+hashSearchTransaction.o: src/hashSearchTransaction.c ${HEADS}
+	${CFLAGS} -c src/hashSearchTransaction.c
 
-sortLinkedList.o: src/sortLinkedList.c include/header.h
-	gcc -std=c99 -Wall -c src/sortLinkedList.c -o objectFiles/sortLinkedList.o
+helpers.o: src/helpers.c ${HEADS}
+	${CFLAGS} -c src/helpers.c
 
-sortArray.o: src/sortArray.c include/header.h
-	gcc -std=c99 -Wall -c src/sortArray.c -o objectFiles/sortArray.o
+main.o: src/main.c ${HEADS}
+	${CFLAGS} -c src/main.c
 
-searchArray.o: src/searchArray.c include/header.h
-	gcc -std=c99 -Wall -c src/searchArray.c -o objectFiles/searchArray.o
+openData.o: src/openData.c ${HEADS}
+	${CFLAGS} -c src/openData.c
 
-helpers.o: src/helpers.c include/header.h
-	gcc -std=c99 -Wall -c src/helpers.c -o objectFiles/helpers.o
+searchArray.o: src/searchArray.c ${HEADS}
+	${CFLAGS} -c src/searchArray.c
+
+sortArray.o: src/sortArray.c ${HEADS}
+	${CFLAGS} -c src/sortArray.c
+
+sortLinkedList.o: src/sortLinkedList.c ${HEADS}
+	${CFLAGS} -c src/sortLinkedList.c
 
 clean:
-	rm objectFiles/*.o bin/customerManager
+	rm *.o bin/${OUT}
